@@ -1,4 +1,4 @@
-server
+Sturesy - Server
 ======
 
 Server files for Sturesy
