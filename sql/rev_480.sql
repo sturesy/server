@@ -1,0 +1,1 @@
+ALTER TABLE `lesturesy_answers` MODIFY `answertext` text ;
