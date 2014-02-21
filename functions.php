@@ -78,14 +78,28 @@ function get_id_cookie()
 }
 
 /**
- * Reloads the Page displaying a success message depending on $success==true
+ * Reloads the Page displaying a success message depending on $success-value
+ * @param $success type of message to display
+ * <li> 1 - vote posted</li>
+ * <li> 2 - no answer selected</li>
+ * <li> 3 - no text input</li>
+ * <li>else - vote already posted</li>
+ *
  */
 function reload_page($success)
 {
 	$msg;
-	if($success)
+	if($success == 1)
 	{
 		$msg = '<div class="alert alert-success"><h4><center>Vote posted!</center></h4></div>';
+	}
+	else if($success == 2)
+	{
+		$msg = '<div class="alert alert-error"><h4><center>Please select an answer!</center></h4></div>';
+	}
+	else if($success == 3)
+	{
+		$msg = '<div class="alert alert-error"><h4><center>Please provide an answer!</center></h4></div>';
 	}
 	else
 	{
@@ -145,8 +159,9 @@ function fnDecrypt($sValue)
 function fetchLectureID($lecturename)
 {
     global $database;
-    $query = "SELECT id FROM sturesy_lectures WHERE lecture ='$lecturename'";
-    return $database->sql_result($database->query($query),0);
+    $query = "SELECT * FROM sturesy_lectures WHERE lecture ='$lecturename'";
+    $result = $database->query($query);    
+    return $database->sql_result($result ,"id");
 }
 
 function verify_rest_message($message, $hmac)
