@@ -94,7 +94,6 @@ function get_question($json)
         
         return json_encode($arr);
     }
- //function get_vote_type($name, $db)
 }
 
 function get_info()

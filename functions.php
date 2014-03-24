@@ -141,19 +141,21 @@ function no_lecture_id()
 
 function fnEncrypt($sValue)
 {
-	global $encryption_key;
-	global $encryption_salt;
-	
-    return trim(base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryption_key, $sValue, MCRYPT_MODE_CBC, $encryption_salt)));
+	global $encryptionKey;
+	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+	$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+	return trim(base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $sValue, MCRYPT_MODE_CBC, $iv)));
 }
 
 function fnDecrypt($sValue)
 {
-	global $encryption_key;
-	global $encryption_salt;
-	
-    return trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryption_key, base64_decode(strtr($sValue, '-_', '+/')), MCRYPT_MODE_CBC, $encryption_salt));
-
+	global $encryptionKey;
+	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
+	$sValue = base64_decode($sValue);
+	$iv_dec = substr($sValue, 0, $iv_size);
+	$ciphertext_dec = substr($sValue, $iv_size);
+	$val = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec));
+	return $val;
 }
 
 function fetchLectureID($lecturename)

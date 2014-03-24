@@ -181,11 +181,14 @@ function update_lecture_type($json)
             ON DUPLICATE KEY UPDATE type = '$type', question = '$question' , answers = '$answers' , correctanswers = '$correct'";
                 
     $query2 = "DELETE FROM sturesy_votes WHERE lid = $lectureid";
+    
+    $query3 = "UPDATE sturesy_lectures SET date=NOW() WHERE id=$lectureid";
           
     $result = $database->query($query);
     if($result)
     {
     	$database->query($query2);
+    	$database->query($query3);
     }
 	//$database->sql_result($result,0);
 }
