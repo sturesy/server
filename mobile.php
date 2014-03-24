@@ -19,9 +19,6 @@
  
 function mobile()
 {
-	global $database;
-	global $encryption_key;
-	
 	header('Content-type: application/json');
 	
 	if($_REQUEST["mobile"] === "sturesy060")
@@ -29,9 +26,9 @@ function mobile()
     	if(isset($_REQUEST["data"]) && isset($_REQUEST["hash"]))
     	{
     	   $json = json_decode(base64_decode($_REQUEST["data"]), true);
-    	   if(isset($json["time"]))
+    	   if(isset($json["time"]) && (time() - (int)($json["time"]) <= 4))
     	   {
-        	   if((time() - (int)($json["time"]) <= 4) && verify_rest_message($_REQUEST["data"], $_REQUEST["hash"]))
+        	   if(verify_rest_message($_REQUEST["data"], $_REQUEST["hash"]))
         	   {
                     if(isset($json) && isset($json["command"]))
                 	{
