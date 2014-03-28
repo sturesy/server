@@ -1,7 +1,7 @@
 <?php 
 /*
  * StuReSy - Student Response System
- * Copyright (C) 2012-2013  StuReSy-Team
+ * Copyright (C) 2012-2014  StuReSy-Team
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ function mobile()
 {
 	header('Content-type: application/json');
 	
-	if($_REQUEST["mobile"] === "sturesy060")
+	if($_REQUEST["mobile"] === "sturesy60")
 	{
     	if(isset($_REQUEST["data"]) && isset($_REQUEST["hash"]))
     	{
