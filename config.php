@@ -27,16 +27,10 @@ $admin_password = "CHANGEME!!!";
 
 
 /**
- * 
- * The encryption key is being used for native apps, to prevent "spamming" votes by calling
- * index.php?mobile=android&vote=xxxx
- * with different values for xxxx
- * 
- * If you do not plan on using native apps with sturesy,
- * you don't need to change anything
+ * The encryption key is being used for native apps, to prevent "spamming".
+ * This can be any arbitrary combination of letters, numbers and special characters
  */
 $encryption_key =  "0011223344556677";
-$encryption_salt = "aabbccddeeffgghh";
 
 /**
  * Setup-Guide for MySQL:
