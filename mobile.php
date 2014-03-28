@@ -61,7 +61,7 @@ function mobile()
 	}
 	else
 	{
-    	die("false");
+    	die("wrong protocol");
 	}
 }
 
