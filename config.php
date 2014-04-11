@@ -17,7 +17,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+
+/**
+ * IMPORTANT!!! If your PHP-Installation does not support mysqli or you get a blank index-page
+ * switch the databaseclass to databaseclas_old
+ */
 include("databaseclass.php");
+//include("databaseclass_old.php"); // uncomment this line to switch to older mysql-versions
 
 /**
  * By specifying an adminpassword, only users with access to the

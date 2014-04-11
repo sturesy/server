@@ -1,6 +1,4 @@
 RENAME TABLE lesturesy_lectures TO sturesy_lectures;
-RENAME TABLE lesturesy_votes TO sturesy_votes;
-
 
 ALTER TABLE sturesy_lectures 
 ADD COLUMN id int NOT NULL AUTO_INCREMENT FIRST, 
@@ -17,23 +15,9 @@ CHANGE COLUMN userpassword userpassword varchar(40) NOT NULL AFTER token, DROP P
 ALTER TABLE sturesy_lectures DROP COLUMN answercount, DROP COLUMN answertype, DROP COLUMN question, DROP COLUMN userpassword;
 
 
-ALTER TABLE sturesy_votes 
-ADD COLUMN lid int NOT NULL FIRST,
-CHANGE COLUMN lecture lecture varchar(40) NOT NULL AFTER lid, 
-CHANGE COLUMN guid guid varchar(60) NOT NULL DEFAULT '' AFTER lecture, 
-CHANGE COLUMN vote vote decimal(10,0) NOT NULL AFTER guid, 
-CHANGE COLUMN fetched fetched tinyint(2) NOT NULL DEFAULT '0' AFTER vote, 
-CHANGE COLUMN date date datetime NOT NULL AFTER fetched, 
-DROP PRIMARY KEY, ADD PRIMARY KEY (guid, lid);
-
-
-UPDATE sturesy_votes SET lid = (SELECT id FROM sturesy_lectures WHERE sturesy_votes.lecture = sturesy_lectures.lecture);
-
-ALTER TABLE sturesy_votes DROP COLUMN lecture;
-
-ALTER TABLE sturesy_votes CHANGE COLUMN vote vote text NOT NULL;
-
-
+DROP TABLE IF EXISTS lesturesy_votes;
+DROP TABLE IF EXISTS lesturesy_questions;
+DROP TABLE IF EXISTS lesturesy_answers;
 
 DROP TABLE IF EXISTS `sturesy_question`;
 CREATE TABLE `sturesy_question` (
@@ -45,4 +29,13 @@ CREATE TABLE `sturesy_question` (
   PRIMARY KEY (`lecture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
-DROP TABLE IF EXISTS lesturesy_answers;
+DROP TABLE IF EXISTS `sturesy_votes`;
+CREATE TABLE `sturesy_votes` (
+  `lid` int(11) NOT NULL,
+  `guid` varchar(60) NOT NULL DEFAULT '',
+  `vote` text NOT NULL,
+  `fetched` tinyint(2) NOT NULL DEFAULT '0',
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`guid`,`lid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
