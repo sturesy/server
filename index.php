@@ -126,7 +126,7 @@ function display_multiple_choice($lecture, $votetype)
 		$c = chr(65+$i);
 		echo "<td>
 		<center>
-		<input type='checkbox' id='check$i' name='$c' value='true'><label for='check$i'>$c</label>
+		<input type='checkbox' id='check$i' class='regular-checkbox big-checkbox' name='$c' value='true'><label for='check$i'>$c</label>
 		</center>
 		</td>";
 		if(($i+1) % 2 == 0)

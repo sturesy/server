@@ -47,50 +47,13 @@
  <link rel="stylesheet" href="css/bootstrap.min.css">
  <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
  <style>
-	 .table th, .table td { border-top: 0px solid; }
-	 input[type=checkbox] {display:none;}
-	 input[type=checkbox] + label {
-        display:border:1px solid black;inline-block;
-        margin:-2px;
-        padding: 4px 12px;
-        margin-bottom: 0;
-        font-size: 14px;
-        line-height: 20px;
-        color: #333;
-        text-align: center;
-        text-shadow: 0 1px 1px rgba(255,255,255,0.75);
-        vertical-align: middle;
-        cursor: pointer;
-        background-color: #f5f5f5;
-        background-image: -moz-linear-gradient(top,#fff,#e6e6e6);
-        background-image: -webkit-gradient(linear,0 0,0 100%,from(#fff),to(#e6e6e6));
-        background-image: -webkit-linear-gradient(top,#fff,#e6e6e6);
-        background-image: -o-linear-gradient(top,#fff,#e6e6e6);
-        background-image: linear-gradient(to bottom,#fff,#e6e6e6);
-        background-repeat: repeat-x;
-        border: 1px solid #ccc;
-        border-color: #e6e6e6 #e6e6e6 #bfbfbf;
-        border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
-        border-bottom-color: #b3b3b3;
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff',endColorstr='#ffe6e6e6',GradientType=0);
-        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-        -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
-        -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
-        box-shadow: inset 0 1px 0 rgba(255,255,255,0.2),0 1px 2px rgba(0,0,0,0.05);
-    }
- 
-    input[type=checkbox]:checked + label {
-        background-image: none;
-        outline: 0;
-        -webkit-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
-        -moz-box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.15),0 1px 2px rgba(0,0,0,0.05);
-        background-color:#e0e0e0;}
+	 .table th, .table td { border-top: 0px solid; }  
  </style>
+ <link rel="stylesheet" href="css/checkbox.css">
 
- <script async="true" src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
- <script async="true" src="js/jquery-1.9.0.min.js"></script>
- <script async="true" src="js/bootstrap.min.js"></script> 
+ <script src="js/modernizr-2.6.2-respond-1.1.0.min.js" async></script>
+ <script src="js/jquery-1.9.0.min.js" async></script>
+ <script src="js/bootstrap.min.js" async></script> 
  <script type="text/javascript">
 	 function reload() {location.reload(true); }
 	 function timedRefresh(timeoutPeriod) {setTimeout("window.location.href = window.location.href;",timeoutPeriod); }
