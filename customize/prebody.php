@@ -1,4 +1,3 @@
-<body>
 <!-- PAGE HEADER -->
 	<div class="navbar navbar-fixed-top">
         	<div class="navbar-inner">
@@ -25,5 +24,4 @@
 				</div>
 			</div>
 		</div>
-        <div class="container">
 <!-- PAGE HEADER -->

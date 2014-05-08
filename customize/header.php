@@ -22,7 +22,7 @@
 <!--[if IE 8]>  <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
- <title>StuReSy</title>
+ <title>Sturesy</title>
  <meta charset="utf-8">
  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
@@ -50,10 +50,6 @@
 	 .table th, .table td { border-top: 0px solid; }  
  </style>
  <link rel="stylesheet" href="css/checkbox.css">
-
- <script src="js/modernizr-2.6.2-respond-1.1.0.min.js" async></script>
- <script src="js/jquery-1.9.0.min.js" async></script>
- <script src="js/bootstrap.min.js" async></script> 
  <script type="text/javascript">
 	 function reload() {location.reload(true); }
 	 function timedRefresh(timeoutPeriod) {setTimeout("window.location.href = window.location.href;",timeoutPeriod); }
