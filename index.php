@@ -26,7 +26,7 @@
 if(isset($_REQUEST["mobile"]))
 {
     include_once 'mobile.php';
-    mobile(); // see mobile.php
+    mobile();
 }
 else
 {

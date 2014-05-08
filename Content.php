@@ -60,7 +60,7 @@ class Content
 	function fallBackSubcontent()
 	{
 		include_once 'views/mainpage.php';
-		$this->subcontent = new mainpage($this->databaseconnection);
+		$this->subcontent = new mainpage();
 	}
 
 	function display()
