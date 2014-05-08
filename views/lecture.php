@@ -17,7 +17,6 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-include_once 'database/DatabaseConnectionInterface.php';
 include_once 'functions.php';
 include_once 'views/lecture_view.php';
 
@@ -28,16 +27,23 @@ class lecture
 
 
     private $lecture_name;
-
     private $lecture_infos;
+
+    private $bodyOnLoadModifcation ="";
 
     function __construct(&$databaseconnection, $user_id_cookie)
     {
         $this->databaseconnection = $databaseconnection;
         $this->user_id_cookie = $user_id_cookie;
 
-
         $this->lecture_name = $_GET["lecture"];
+
+        if($this->hasUserIssuedVote())
+        {
+            // we'll be reloading later
+            $this->bodyOnLoadModifcation = 'onLoad="JavaScript:timedRefresh(2000);"';
+        }
+
     }
     function __destruct()
     {
@@ -45,11 +51,22 @@ class lecture
 
     function display()
     {
-
         $this->lecture_infos = $this->databaseconnection->getVotingInformationForLecture($this->lecture_name);
          
-
-        if(isset($_REQUEST["cmd"]) && isset($_REQUEST["type"]))
+        if($this->lecture_infos === NULL)
+        {
+            $msg;
+            if(!isset($this->lecture_name) || strlen($this->lecture_name) == 0)
+            {
+                $msg = "Please enter a Lecture-ID";
+            }
+            else
+            {
+                $msg = 'There is currently no Voting with the provided Lecture-ID "<b>'.$this->lecture_name.'</b>"';
+            }
+            display_no_lecture_id($msg);
+        }
+        else if($this->hasUserIssuedVote())
         {
             $this->handleVoting();
         }
@@ -59,27 +76,33 @@ class lecture
         }
 
     }
-    
-    
+
+
+    function hasUserIssuedVote()
+    {
+        return isset($_POST["cmd"]) && isset($_POST["type"]);
+    }
+
+
     function display_voting()
     {
         display_question($this->lecture_name, $this->lecture_infos[0]);
         switch($this->lecture_infos[1])
         {
-            case "singlechoice" : 
-                display_single_choice($this->lecture_name, json_decode($this->lecture_infos[2]), $this->prepare_single_choice_vote_buttons()); 
+            case "singlechoice" :
+                display_single_choice($this->lecture_name, json_decode($this->lecture_infos[2]), $this->prepare_single_choice_vote_buttons());
                 break;
-    
-            case "multiplechoice" : 
-                display_multiple_choice($this->lecture_name, json_decode($this->lecture_infos[2])); 
+
+            case "multiplechoice" :
+                display_multiple_choice($this->lecture_name, json_decode($this->lecture_infos[2]));
                 break;
-    
-            case "textchoice": 
+
+            case "textchoice":
                 display_text_choice($this->lecture_name);
                 break;
         }
     }
-    
+
     function prepare_single_choice_vote_buttons()
     {
         $result = array();
@@ -91,14 +114,14 @@ class lecture
         }
         return $result;
     }
-    
+
 
     function handleVoting()
     {
         $response = $this->user_id_cookie;
         if($this->user_id_cookie)
         {
-            switch($_REQUEST["type"])
+            switch($_POST["type"])
             {
                 case "s": $response = $this->handle_single_vote(); break;
                 case "m": $response = $this->handle_multiple_vote(); break;
@@ -112,23 +135,21 @@ class lecture
 
     function handle_single_vote()
     {
-        global $ID;
-        global $_REQUEST;
         $stuff = explode(",", fnDecrypt($_REQUEST['cmd']));
 
-        if($stuff[1]==$ID && $stuff[2]=='vote')
+        if($stuff[1]==$this->user_id_cookie && $stuff[2]=='vote')
         {
             $vote = $stuff[3];
-            return post_vote($_REQUEST["lecture"], $ID, $vote);
+            return  $this->databaseconnection->postVoteForLecture($this->lecture_name, $this->user_id_cookie, $vote);
         }
-        else return false;
+        else
+        {
+            return false;
+        }
     }
 
     function handle_multiple_vote()
     {
-        global $ID;
-        global $_REQUEST;
-
         $votes = array();
         for($i = 0; $i < 10; $i++)
         {
@@ -141,13 +162,12 @@ class lecture
 
         if(sizeof($votes) > 0)
         {
-            return post_vote($_REQUEST["lecture"], $ID, json_encode($votes));
+            return $this->databaseconnection->postVoteForLecture($this->lecture_name, $this->user_id_cookie, json_encode($votes));
         }
         else
         {
             return 2;
         }
-        return true;
     }
 
 
@@ -158,7 +178,7 @@ class lecture
 
         if(isset($_REQUEST["text"]) && strlen($_REQUEST["text"]) > 0)
         {
-            return post_vote($_REQUEST["lecture"], $ID, json_encode($_REQUEST["text"]));
+            return $this->databaseconnection->postVoteForLecture($this->lecture_name, $this->user_id_cookie, json_encode($_REQUEST["text"]));
         }
         else
         {
@@ -173,7 +193,7 @@ class lecture
      */
     function modifiedBodyValues()
     {
-        return ""; // <body> tag not modified
+        return $this->bodyOnLoadModifcation; // <body> tag not modified
     }
 
 
@@ -181,10 +201,10 @@ class lecture
      * Remove function if not necessary
      * @return string
      */
-    function additionalJavascript()
-    {
-        return ""; // additional javascript
-    }
+    //     function additionalJavascript()
+    //     {
+    //         return ""; // additional javascript
+    //     }
 
 }
 

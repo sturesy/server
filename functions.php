@@ -18,31 +18,6 @@
  */
 
 /**
- * Returns the voting type and corresponding information
- * @param name (string), lecture name
- */
-function get_vote_type($name)
-{
-    global $database; 
-	$name = $database->escape_string($name);
-	$query = "SELECT question, type, answers, correctanswers, sturesy_lectures.date FROM sturesy_lectures, sturesy_question 
-	           WHERE sturesy_question.lecture = id AND sturesy_lectures.lecture = '$name';";
-
-
-	$result = $database->fetch_array($database->query($query));
-	
-	if(!$result)
-	{
-	   return -1;
-	}
-	else
-	{
-		return $result;
-	}
-}
-
-
-/**
  * If the cookie is not set, set it and then return it
  */
 function get_id_cookie()
@@ -105,39 +80,9 @@ function reload_page($success)
 	{
 		$msg = '<div class="alert alert-error"><h4><center>Vote already posted!</center></h4></div>';
 	}
-?>
-<body onLoad="JavaScript:timedRefresh(2000);">
-<?php 
-echo $msg ;
+    echo $msg ;
 }
 
-
-function no_lecture_id()
-{
-	$lectureid = $_REQUEST["lecture"];
-	$msg;
-	if(!isset($lectureid) || strlen($lectureid) == 0)
-	{
-		$msg = "Please enter a Lecture-ID";
-	}
-	else
-	{
-		$msg = 'There is currently no Voting with the provided Lecture-ID "<b>'.$lectureid.'</b>"';
-	}
-?>
-	<div class="container" align="center">
-		<form class="form-signin">
-			<h2>Error</h2>
-			<p class="red size20"><?php echo $msg; ?></p>
-			<br>
-			<button class="btn btn-warning btn-large" onClick="history.go(-1);return true;">
-				<i class="icon-arrow-left icon-white"></i> Back
-			</button>
-		</form>
-	</div>
-<?php
-	include_once("customize/footer.php");
-}
 
 function fnEncrypt($sValue)
 {
@@ -156,14 +101,6 @@ function fnDecrypt($sValue)
 	$ciphertext_dec = substr($sValue, $iv_size);
 	$val = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec));
 	return $val;
-}
-
-function fetchLectureID($lecturename)
-{
-    global $database;
-    $query = "SELECT * FROM sturesy_lectures WHERE lecture ='$lecturename'";
-    $result = $database->query($query);    
-    return $database->sql_result($result ,"id");
 }
 
 function verify_rest_message($message, $hmac)

@@ -126,4 +126,21 @@ function display_single_choice($lecture_name, $answers, $preparedValuesForButton
 
 
 
+function display_no_lecture_id($message)
+{
+?>
+    	<div class="container" align="center">
+    		<form class="form-signin">
+    			<h2>Error</h2>
+    			<p class="red size20"><?php echo $message; ?></p>
+    			<br>
+    			<button class="btn btn-warning btn-large" onClick="history.go(-1);return true;">
+    				<i class="icon-arrow-left icon-white"></i> Back
+    			</button>
+    		</form>
+    	</div>
+<?php 
+}
+
+
 ?>

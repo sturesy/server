@@ -17,6 +17,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*
+ * CURRENT VERSION : 0.6.1
+ * COMPATIBLE WITH STURESY: 0.6.0 and higher
+ */
+
+
+if(isset($_REQUEST["mobile"]))
+{
+    include_once 'mobile.php';
+    mobile(); // see mobile.php
+}
+else
+{
 
 $app = new Application();
 
@@ -27,9 +40,12 @@ include_once 'customize/header.php';
 echo "<body ". $app->content->modifiedBodyValues() .">";
 
 include_once 'customize/prebody.php';
+
+$app->display();
+
+include_once "customize/footer.php";
+
 ?>
-<?php $app->display();?>
-<?php include_once "customize/footer.php"; ?>
 <script src="js/jquery-1.9.0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -39,37 +55,28 @@ include_once 'customize/prebody.php';
 <?php 
 
 
-class Application 
+}
+
+class Application
 {
     public $content;
     private $user_id_cookie;
-    
-    function __construct()
-    {   
-    }
-    function __destruct()
-    {
-            
-    }
-    
+
     function handleCookiesAndInitContent()
     {
         include_once 'functions.php';
         $this->user_id_cookie = get_id_cookie();
-        
+
         include_once 'Content.php';
         $this->content = new Content($this->user_id_cookie);
         $this->content->handleCookies();
     }
-    
+
     function display()
     {
         $this->content->display();
     }
-    
 }
-
-
 
 
 ?>
