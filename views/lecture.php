@@ -187,15 +187,10 @@ class lecture
     }
 
 
-    /**
-     * Remove function if not necessary
-     * @return string
-     */
     function modifiedBodyValues()
     {
-        return $this->bodyOnLoadModifcation; // <body> tag not modified
+        return $this->bodyOnLoadModifcation; 
     }
-
 
     /**
      * Remove function if not necessary

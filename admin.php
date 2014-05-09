@@ -245,6 +245,7 @@ function create_lecture($name, $pwd, $owner, $db)
     $name,$pwd,$owner,date("Y-m-d H:i:s"), sha1($name.$pwd.$owner));
 
   $result = $db->query($query);
+  return $result;
 }
 
 
