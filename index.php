@@ -70,6 +70,7 @@ class Application
         include_once 'Content.php';
         $this->content = new Content($this->user_id_cookie);
         $this->content->handleCookies();
+        $this->content->setup();
     }
 
     function display()

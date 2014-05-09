@@ -35,18 +35,20 @@ class lecture
     {
         $this->databaseconnection = $databaseconnection;
         $this->user_id_cookie = $user_id_cookie;
-
+    }
+    function __destruct()
+    {
+    }
+    
+    function setup()
+    {
         $this->lecture_name = $_GET["lecture"];
-
+        
         if($this->hasUserIssuedVote())
         {
             // we'll be reloading later
             $this->bodyOnLoadModifcation = 'onLoad="JavaScript:timedRefresh(2000);"';
         }
-
-    }
-    function __destruct()
-    {
     }
 
     function display()
