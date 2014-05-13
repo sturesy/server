@@ -135,39 +135,7 @@ class admin
     function javascriptForLectureCreation()
     {
         return '
-$("#lecturefield").keyup(function() 
-{ 
-	var data = $("#lecturefield").val();
-	if(data.length == 0)
-	{
-		$( "#lecturefree" ).html( "" ).css("visibility", "hidden");
-	}
-	else if(data.length < 4 )
-	{
-		$( "#lecturefree" ).html( "too short" ).removeAttr("style");
-	}
-	else
-	{
-		checkLecture(data);
-	}
-	}
-);
-
-function checkLecture(lecture){
-	$.post( "rest.php?query=checklecture&lecture="+lecture, 
-		function( data ) {
-                if(data==="true")
-                {
-                $( "#lecturefree" ).html( "<i class=\'icon-ok\'>" ).removeAttr("style");
-                }
-                else
-                {
-                $( "#lecturefree" ).html( "<i class=\'icon-remove\'>" ).removeAttr("style");
-                }
-			
-		}
-	);
-}
+function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'icon-ok\'>").removeAttr("style"):$("#lecturefree").html("<i class=\'icon-remove\'>").removeAttr("style")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html("").css("visibility","hidden"):e.length<4?$("#lecturefree").html("too short").removeAttr("style"):checkLecture(e)});
                 ';
     }
 
