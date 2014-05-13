@@ -17,6 +17,16 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+global $INDEXPHPWASACCESSED;
+if($INDEXPHPWASACCESSED !== true)
+{
+    die('<meta http-equiv="refresh" content="0; url=../index.php" />');
+}
+
+
+include_once 'database/DatabaseConnectionInterface.php';
+
 /**
  * This is the basic Template for controller-classes
  * 
@@ -26,7 +36,7 @@ class Home
 {
 	private $databaseconnection;
 
-	function __construct(&$databaseconnection)
+	function __construct(DatabaseConnection &$databaseconnection)
 	{
 		$this->databaseconnection = $databaseconnection;
 	}

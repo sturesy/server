@@ -18,6 +18,12 @@
  */
 
 
+global $INDEXPHPWASACCESSED;
+if($INDEXPHPWASACCESSED !== true)
+{
+    die('<meta http-equiv="refresh" content="0; url=../index.php" />');
+}
+
 function display_reload_button()
 {
     ?>

@@ -31,6 +31,8 @@ if(isset($_REQUEST["mobile"]))
 else
 {
 
+$INDEXPHPWASACCESSED = true;    
+    
 $app = new Application();
 
 $app->handleCookiesAndInitContent();
@@ -49,7 +51,13 @@ include_once "customize/footer.php";
 <script src="js/jquery-1.9.0.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-<?php $js = $app->content->additionalJavascript(); if($js !== false) echo "<script type=\"text/javascript\">".$js."</script>"?>
+<?php 
+$js = $app->content->additionalJavascript();
+if($js !== false)
+{
+    echo "<script type=\"text/javascript\">".$js."</script>\n";
+}
+?>
 </body>
 </html>
 <?php 

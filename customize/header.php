@@ -50,6 +50,7 @@
 	 .table th, .table td { border-top: 0px solid; }  
  </style>
  <link rel="stylesheet" href="css/checkbox.css">
+ <link rel="stylesheet" href="css/custom.css">
  <script type="text/javascript">
 	 function reload() {location.reload(true); }
 	 function timedRefresh(timeoutPeriod) {setTimeout("window.location.href = window.location.href;",timeoutPeriod); }

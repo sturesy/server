@@ -17,8 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+global $INDEXPHPWASACCESSED;
+if($INDEXPHPWASACCESSED !== true)
+{
+    die('<meta http-equiv="refresh" content="0; url=../index.php" />');
+}
+
 include_once 'functions.php';
 include_once 'views/lecture_view.php';
+
+include_once 'database/DatabaseConnectionInterface.php';
 
 class lecture
 {
@@ -31,7 +39,7 @@ class lecture
 
     private $bodyOnLoadModifcation ="";
 
-    function __construct(&$databaseconnection, $user_id_cookie)
+    function __construct(DatabaseConnection &$databaseconnection, $user_id_cookie)
     {
         $this->databaseconnection = $databaseconnection;
         $this->user_id_cookie = $user_id_cookie;

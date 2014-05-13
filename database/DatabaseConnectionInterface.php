@@ -6,6 +6,16 @@
  */
 interface DatabaseConnection
 {
+    
+    
+    
+    
+    // ========================================
+    // General functions:
+    // ========================================
+    
+    function getLastError();
+    
     // ========================================
     // Voting functions:
     // ========================================
@@ -20,6 +30,15 @@ interface DatabaseConnection
     // Administration functions:
     // ========================================
 
-    function createNewLectureID($name, $password, $owner);
+    function createNewLectureID($name, $password, $owner, $email);
+
+    /**
+     * Returns a list of lecture-ids with: name, owner, last-used-date and token
+     */
+    function getLectureIDAdminInfos();
+    
+    function generateNewTokenForLectureID($lecture,$owner,$date);
+    
+    function isLectureIDFree($lectureid);
 
 }

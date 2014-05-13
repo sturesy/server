@@ -7,7 +7,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
 					</a>
-                    <a class="brand" href="#"><img src="img/icon-19x19.png" alt="Logo">&nbsp;StuReSy</a>
+                    <a class="brand" href="index.php"><img src="img/icon-19x19.png" alt="Logo">&nbsp;StuReSy</a>
 					<div class="nav-collapse collapse">
                     	<ul class="nav"> 
                             <li class="dropdown">

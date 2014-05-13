@@ -109,4 +109,18 @@ function verify_rest_message($message, $hmac)
 	return hash_hmac('SHA256', $message, $encryption_key) === $hmac;
 }
 
+function show_success($msg)
+{
+?>
+<div class="alert alert-success text-center"><h2>Success</h2><p><?php echo $msg ?></p></div>
+<?php
+}
+
+function show_error($msg)
+{
+?>
+<div class="alert alert-error text-center"><h2>Error</h2><p><?php echo $msg ?><p/></div>
+<?php
+}
+
 ?>

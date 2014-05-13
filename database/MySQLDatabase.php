@@ -19,6 +19,11 @@ class MySQLDatabase implements DatabaseConnection
             mysql_close($this->mysql);
         }
     }
+    
+    function getLastError()
+    {
+        return mysql_error($this->mysql);
+    }
 
     function getVotingInformationForLecture($lecturename)
     {
@@ -71,18 +76,50 @@ class MySQLDatabase implements DatabaseConnection
         return $lectureName;
     }
     
-    function createNewLectureID($name, $password, $owner)
+    function createNewLectureID($name, $password, $owner, $email)
     {
         $name = mysql_real_escape_string($name);
         $pwd  = mysql_real_escape_string($pwd);
         $owner = mysql_real_escape_string($owner);
+        $email = mysql_real_escape_string($email);
     
-        $query = sprintf("INSERT INTO sturesy_lectures (lecture, password, owner, date, token) VALUES ('%s', '%s', '%s', '%s', '%s')",
-                $name, $pwd, $owner, date("Y-m-d H:i:s"), sha1($name.$pwd.$owner));
+        $query = sprintf("INSERT INTO sturesy_lectures (lecture, password, owner, email, date, token) VALUES ('%s', '%s','%s', '%s', '%s', '%s')",
+                $name, $pwd, $owner, $email, date("Y-m-d H:i:s"), sha1($name.$pwd.$owner));
     
         return mysql_query($query, $this->mysql);
     }
     
+    
+    function getLectureIDAdminInfos()
+    {
+        $query = "SELECT lecture,owner,email,date,token FROM sturesy_lectures $orderby";
+        $result = mysql_query($query, $this->mysql);
+    
+    
+        $returnval = array();
+        if($result !== false)
+        {
+            
+            while($row = mysql_fetch_array($result, MYSQL_BOTH))
+            {
+                array_push($returnval,$row);
+            }
+        }
+        mysql_free_result($result);
+    
+        return $returnval;
+    }
+    
+    function generateNewTokenForLectureID($lecture,$owner,$date)
+    {
+        $lecture = mysql_real_escape_string($lecture);
+        $owner = mysql_real_escape_string($owner);
+        $token = sha1($lecture.$owner.$date);
+    
+        $query = "UPDATE sturesy_lectures SET token='$token' WHERE lecture='$lecture' AND owner='$owner'";
+        $result = mysql_query($query, $this->mysql);
+        return $result;
+    }
 
 
 }

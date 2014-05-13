@@ -9,10 +9,12 @@ CREATE TABLE `sturesy_lectures` (
   `lecture` varchar(40) NOT NULL,
   `password` varchar(40) NOT NULL,
   `owner` varchar(50) NOT NULL,
+  `email` varchar(80) NOT NULL,
   `date` datetime NOT NULL,
   `token` char(40) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `lecture` (`lecture`)
+  UNIQUE KEY `lecture` (`lecture`),
+  UNIQUE KEY `token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 DROP TABLE IF EXISTS `sturesy_question`;

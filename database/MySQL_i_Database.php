@@ -17,6 +17,11 @@ class MySQLiDatabase implements DatabaseConnection
         $this->mysqli->close();
     }
 
+    
+    function getLastError()
+    {
+        return $this->mysqli->error;    
+    }
 
     function getVotingInformationForLecture($lecturename)
     {
@@ -79,16 +84,66 @@ class MySQLiDatabase implements DatabaseConnection
     }
 
 
-    function createNewLectureID($name, $password, $owner)
+    function createNewLectureID($name, $password, $owner, $email)
     {
         $name = $this->mysqli->real_escape_string($name);
-        $pwd  = $this->mysqli->real_escape_string($pwd);
+        $password  = $this->mysqli->real_escape_string($password);
         $owner = $this->mysqli->real_escape_string($owner);
+        $email = $this->mysqli->real_escape_string($email);
 
-        $query = sprintf("INSERT INTO sturesy_lectures (lecture, password, owner, date, token) VALUES ('%s', '%s', '%s', '%s', '%s')",
-                $name,$pwd,$owner,date("Y-m-d H:i:s"), sha1($name.$pwd.$owner));
+        $query = sprintf("INSERT INTO sturesy_lectures (lecture, password, owner, email, date, token) VALUES ('%s', '%s', '%s', '%s', '%s', '%s')",
+                $name,$password,$owner,$email,date("Y-m-d H:i:s"), sha1($name.$password.$owner));
 
         return $this->mysqli->query($query);
+    }
+
+    function getLectureIDAdminInfos($orderby_attachment = "")
+    {
+        $query = "SELECT lecture,owner,email,date,token FROM sturesy_lectures $orderby_attachment";
+        $result = $this->mysqli->query($query);
+
+
+        $returnval = array();
+        if($result !== false)
+        {
+            while($row = $result->fetch_array(MYSQLI_BOTH))
+            {
+                array_push($returnval,$row);
+            }
+        }
+        
+        $result->free();
+
+        return $returnval;
+    }
+    
+    function generateNewTokenForLectureID($lecture,$owner,$date)
+    {
+        $lecture = $this->mysqli->real_escape_string($lecture);
+        $owner = $this->mysqli->real_escape_string($owner);
+        $token = sha1($lecture.$owner.$date);
+    
+        $query = "UPDATE sturesy_lectures SET token='$token' WHERE lecture='$lecture' AND owner='$owner'";
+        $result = $this->mysqli->query($query);
+        return $result;
+    }
+    
+    function isLectureIDFree($lectureid)
+    {
+        $lectureid = $this->mysqli->real_escape_string($lectureid);
+        $query = "SELECT lecture from sturesy_lectures WHERE lecture='$lectureid'";
+        
+        $result = $this->mysqli->query($query);
+        
+        if($result !== false)
+        {
+            $numrows = $result->num_rows;
+            $result->free();
+
+            return $numrows === 0;
+        }
+        
+        return false;
     }
 
 }

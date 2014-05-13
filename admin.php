@@ -65,7 +65,8 @@ if(!isset($_REQUEST["query"]))
 				{
 					insert_lecture();
 				}
-					show_create_dialog();
+				
+				show_create_dialog();
 			}
 			else if (isset($_GET["overview"]))
 			{
@@ -105,7 +106,7 @@ else
 		{
 			if(isset($_REQUEST["l"]) && isset($_REQUEST["o"]) && isset($_REQUEST["d"]))
 			{
-				generate_new_token($_REQUEST["l"],$_REQUEST["o"],$_REQUEST["d"]);
+				generate_new_token($_REQUEST["l"],$_REQUEST["o"], date());
 			}
 		}
 	}
