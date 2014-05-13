@@ -120,6 +120,25 @@ class MySQLDatabase implements DatabaseConnection
         $result = mysql_query($query, $this->mysql);
         return $result;
     }
+    
+
+    function isLectureIDFree($lectureid)
+    {
+        $lectureid = mysql_real_escape_string($lectureid);
+        $query = "SELECT lecture from sturesy_lectures WHERE lecture='$lectureid'";
+    
+        $result = mysql_query($query, $this->mysql);
+    
+        if($result !== false)
+        {
+            $numrows = mysql_num_rows($result);
+            mysql_free_result($result);
+            return $numrows === 0;
+        }
+    
+        return false;
+    }
+    
 
 
 }
