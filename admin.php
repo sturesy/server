@@ -17,6 +17,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+die('<!DOCTYPE html><head><meta http-equiv="refresh" content="1; url=index.php?admin" /></head><body>Redirecting in 1 second<br><a href="index.php?admin">Open Adminpanel</a>');
+
+//
 include("config.php");
 
 session_start();

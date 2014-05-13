@@ -99,10 +99,13 @@ class MySQLiDatabase implements DatabaseConnection
 
     function getLectureIDAdminInfos($orderby_attachment = "")
     {
+        if(strlen($orderby_attachment) > 0)
+        {
+            $orderby_attachment = "ORDER BY " . $this->mysqli->real_escape_string($orderby_attachment);
+        }
+
         $query = "SELECT lecture,owner,email,date,token FROM sturesy_lectures $orderby_attachment";
         $result = $this->mysqli->query($query);
-
-
         $returnval = array();
         if($result !== false)
         {

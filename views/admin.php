@@ -126,8 +126,8 @@ class admin
                 function orderTable(order){
                 $("#overviewtable").load("rest.php?query=table&order="+order ,
                 function() {
-                });}
-                
+    });}
+
                 function renewToken(l,o){var loadURL = "rest.php?query=renewtoken&l="+l+"&o="+o;$.ajax({url: loadURL}).done(function() {orderTable("lecture");});}
                 ';
     }
@@ -135,7 +135,7 @@ class admin
     function javascriptForLectureCreation()
     {
         return '
-function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'icon-ok\'>").removeAttr("style"):$("#lecturefree").html("<i class=\'icon-remove\'>").removeAttr("style")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html("").css("visibility","hidden"):e.length<4?$("#lecturefree").html("too short").removeAttr("style"):checkLecture(e)});
+                function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'icon-ok\'>").removeAttr("style"):$("#lecturefree").html("<i class=\'icon-remove\'>").removeAttr("style")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html("").css("visibility","hidden"):e.length<4?$("#lecturefree").html("too short").removeAttr("style"):checkLecture(e)});
                 ';
     }
 
@@ -176,7 +176,6 @@ function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,functio
                     $this->javascriptCode = $this->javascriptForTableReload();
                     show_navbar();
                     show_lecture_table($this->databaseconnection->getLectureIDAdminInfos(), true);
-                    close_page_body();
                     break;
                 }
             case "creation":
@@ -184,17 +183,17 @@ function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,functio
                     $this->javascriptCode = $this->javascriptForLectureCreation();
                     show_navbar();
                     show_lecture_id_create_dialog();
-                    close_page_body();
                     break;
                 }
             case "logout":
                 {
+                    $this->handleLogout();
                     break;
                 }
             default: show_navbar();
             show_welcome_screen();
-            close_page_body();
         }
+        close_page_body();
     }
 
     function handleCreatingNewLecture()
@@ -239,6 +238,20 @@ function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,functio
 
 
         close_page_body();
+    }
+
+    function handleLogout()
+    {
+        echo "<div><div>";
+        
+        $bool = session_destroy();
+        $_SESSION = NULL;
+        if($bool)
+            show_success("Logged out successfully!<br/>
+                    <small>This page will refresh automatically in 3 seconds or <a href='index.php?admin'>click here</a></small>
+                    <meta http-equiv='refresh' content='3; url=index.php?admin'/>");
+        else
+            show_error("There was a problem logging out");
     }
 
 

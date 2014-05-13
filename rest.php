@@ -38,10 +38,11 @@ else
 
 function request_show_table()
 {
-    $orderby='';
+    global $dbcon;
+    $orderby = "";
     if(isset($_REQUEST["order"]))
     {
-        $orderby = 'ORDER BY '.$database->escape_string($_REQUEST['order']);
+        $orderby= $_REQUEST['order'];
     }
 
     show_lecture_table($dbcon->getLectureIDAdminInfos($orderby));
