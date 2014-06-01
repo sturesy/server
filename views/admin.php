@@ -170,6 +170,10 @@ class admin
         }
         else
         {
+            include_once 'functions.php';
+            
+            show_error("Wrong login information!");
+            show_login_form();
             // wrong info
         }
     }

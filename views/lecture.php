@@ -55,7 +55,7 @@ class lecture
         if($this->hasUserIssuedVote())
         {
             // we'll be reloading later
-            $this->bodyOnLoadModifcation = 'onLoad="JavaScript:timedRefresh(2000);"';
+            $this->bodyOnLoadModifcation = reload_page_httpbodymod(2000);
         }
     }
 

@@ -166,7 +166,7 @@ function display_no_lecture_id($message)
     			<p class="red size20"><?php echo $message; ?></p>
     			<br>
     			<button class="btn btn-warning btn-large" onClick="history.go(-1);return true;">
-    				<i class="icon-arrow-left icon-white"></i> Back
+    				<i class="glyphicon glyphicon-arrow-left"></i> Back
     			</button>
     		</form>
     	</div>

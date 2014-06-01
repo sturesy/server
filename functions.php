@@ -66,21 +66,30 @@ function reload_page($success)
 	$msg;
 	if($success == 1)
 	{
-		$msg = '<div class="alert alert-success"><h4><center>Vote posted!</center></h4></div>';
+		$msg = '<div class="alert alert-success text-center"><h4>Vote posted!</h4></div>';
 	}
 	else if($success == 2)
 	{
-		$msg = '<div class="alert alert-error"><h4><center>Please select an answer!</center></h4></div>';
+		$msg = '<div class="alert alert-danger text-center"><h4>Please select an answer!</h4></div>';
 	}
 	else if($success == 3)
 	{
-		$msg = '<div class="alert alert-error"><h4><center>Please provide an answer!</center></h4></div>';
+		$msg = '<div class="alert alert-danger text-center"><h4>Please provide an answer!</h4></div>';
 	}
 	else
 	{
-		$msg = '<div class="alert alert-error"><h4><center>Vote already posted!</center></h4></div>';
+		$msg = '<div class="alert alert-danger text-center"><h4>Vote already posted!</h4></div>';
 	}
     echo $msg ;
+}
+/**
+ * Returns the appropriate javascript snippet for reloading the page
+ * @param int $time in milliseconds
+ * @return string javascript-snipped for &lt;body&gt; in form onLoad=".."
+ */
+function reload_page_httpbodymod($time)
+{
+    return 'onLoad="JavaScript:timedRefresh('.$time.');"';
 }
 
 
@@ -119,7 +128,7 @@ function show_success($msg)
 function show_error($msg)
 {
 ?>
-<div class="alert alert-error text-center"><h2>Error</h2><p><?php echo $msg ?><p/></div>
+<div class="alert alert-danger text-center"><h2>Error</h2><p><?php echo $msg ?><p/></div>
 <?php
 }
 
