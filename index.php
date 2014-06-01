@@ -48,9 +48,8 @@ $app->display();
 include_once "customize/footer.php";
 
 ?>
-<script src="js/jquery-1.9.0.min.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 <?php 
 $js = $app->content->additionalJavascript();
 if($js !== false)

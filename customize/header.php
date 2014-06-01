@@ -17,10 +17,6 @@
  */
 ?>
 <!DOCTYPE html>
-<!--[if lt IE 7]>  <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>  <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>  <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
  <title>Sturesy</title>
  <meta charset="utf-8">
@@ -35,8 +31,6 @@
  <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png">
  
  <style>
-	 body {padding-bottom: 60px; }
-	 @media (min-width: 981px) { body { padding-top: 60px; } }
 	 .form-signin {	max-width: 300px; padding: 19px 29px 29px; margin: 0 auto 20px;	background-color: #f5f5f5;
 	 border: 1px solid #e5e5e5; -webkit-border-radius: 5px; -moz-border-radius: 5px; border-radius: 5px;
 	 -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);-moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
@@ -45,10 +39,6 @@
 	 table form{ margin-bottom: 0px;}
  </style> 
  <link rel="stylesheet" href="css/bootstrap.min.css">
- <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
- <style>
-	 .table th, .table td { border-top: 0px solid; }  
- </style>
  <link rel="stylesheet" href="css/checkbox.css">
  <link rel="stylesheet" href="css/custom.css">
  <script type="text/javascript">

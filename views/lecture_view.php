@@ -27,19 +27,19 @@ if($INDEXPHPWASACCESSED !== true)
 function display_reload_button()
 {
     ?>
- <button type="button" class="btn btn-large" onclick="reload();"><i class="icon-refresh"></i> Reload</button>
+<button type="button" class="btn btn-default btn-lg" onclick="reload();"><i class="glyphicon glyphicon-refresh"></i> Reload</button>
     <?php
 }
 
 function display_question($lecture_name, $question_text)
 {
 ?>
-<p class="text-center">
-	<small>Lecture-ID: <?php echo $lecture_name;?></small>
-</p>
-<h4 class="text-center">
-	<?php echo $question_text; ?>
-</h4>
+
+<div class="container-fluid">
+    <div class="row text-center">
+    <p><small>Lecture-ID: <?php echo $lecture_name;?></small></p>
+    <h4 class="text-center"><?php echo $question_text; ?></h4>
+    </div>
 <?php 
 }
 
@@ -48,18 +48,27 @@ function display_question($lecture_name, $question_text)
 function display_text_choice($lecture_name)
 {
 ?>
-<br>
-<center>
-	<form method="post" action="index.php?lecture=<?php echo $lecture_name;?>">
-		<label>Answer:</label> <input type="text" placeholder="" name="text">
-		<input type="hidden" name="cmd" value="text" /> <input type="hidden"
-			name="type" value="t" /><br> <input type="submit"
-			class="btn btn-large" value="Submit" />
-	</form>
-	<br>
 
-	<?php display_reload_button();?>
-</center>
+    <br>
+    <div class="row"> <!-- row1 -->
+    	<div class="col-xs-offset-2 col-xs-8 col-sd-offset-4 col-sd-4 col-md-offset-4 col-md-4">
+    	    <form class="form-group text-center" method="post" action="index.php?lecture=<?php echo $lecture_name;?>">
+        		<label class="">Answer:</label> 
+        		<input class="form-control" placeholder="" name="text" type="text">
+        		<input class="form-control" name="cmd" value="text" type="hidden">
+        		<input class="form-control" name="type" value="t" type="hidden">
+        		<br>
+        		<input class="btn btn-default btn-lg" value="Submit" type="submit">
+    	    </form>
+    	</div>
+    </div><!-- row1 -->
+    <div class="row"> <!-- row2 -->
+        <div class="text-center">
+    	    <?php display_reload_button();?>
+    </div>
+    </div><!-- row2 -->
+
+</div>	<!-- container-fluid -->
 <?php
 }
 
@@ -77,8 +86,8 @@ function display_multiple_choice($lecture_name, $answers)
            {
             $c = chr(65+$i); 
         ?>
-        <td class="text-center" style="text-align:center;">
-            <input type='checkbox' id='check<?php echo $i;?>' class='regular-checkbox big-checkbox' name='<?php echo $c;?>' value='true'><label for='check<?php echo $i;?>'><?php echo $c;?></label>
+        <td class="text-center" style="border-top:none;">
+            <input type="checkbox" id="checkbox-2-<?php echo $i;?>" name="<?php echo $c;?>"><label for="checkbox-2-<?php echo $i;?>"><?php echo $c;?></label>
         </td>
         <?php
               if(($i+1) % 2 == 0)
@@ -91,8 +100,8 @@ function display_multiple_choice($lecture_name, $answers)
            }?>
         </tr>
 			<tr>
-			    <td colspan="2" style="text-align:center;">
-			        <button type="submit" class="btn btn-large"><i class="icon-ok"></i>Submit</button>
+			    <td colspan="2" style="border-top:none;">
+			        <button type="submit" class="btn btn-default btn-large"><i class="icon-ok"></i>Submit</button>
 			    </td>
 			</tr>
 	</table>
@@ -100,7 +109,7 @@ function display_multiple_choice($lecture_name, $answers)
 </form>
 	<table class="table table-condensed text-center">
 	    <tr>
-		    <td colspan="2" style="text-align:center;">
+		    <td colspan="2" style="border-top:none;">
 		        <?php display_reload_button();?>
 		    </td>
         </tr>
@@ -113,18 +122,18 @@ function display_multiple_choice($lecture_name, $answers)
 function display_single_choice($lecture_name, $answers, $preparedValuesForButton)
 {
     ?>
-<table class="table table-condensed" align="center">
+<table class="table table-condensed text-center table-borderless">
     <tr>
     <?php 
     for ($i = 0; $i < count($answers); $i++)
     {
     ?>
     
-        <td>
+        <td style="border-top: none;">
 		    <form method="post" action="index.php?lecture=<?php echo $lecture_name;?>">
 	    	    <input type="hidden" name="cmd" value="<?php echo $preparedValuesForButton[$i][0];?>"/>
 		        <input type="hidden" name="type" value="s"/>
-		        <input type="submit" class="btn btn-large btn-block" value="<?php echo $preparedValuesForButton[$i][1];?>" />
+		        <input type="submit" class="btn btn-default btn-large btn-block" value="<?php echo $preparedValuesForButton[$i][1];?>" />
 		    </form>
 		</td>
     <?php 
@@ -138,7 +147,7 @@ function display_single_choice($lecture_name, $answers, $preparedValuesForButton
     ?>
     </tr>
 	<tr>
-	    <td colspan="2" style="text-align:center;">
+	    <td colspan="2" style="border-top: none;">
 	        <?php display_reload_button();?>
 	    </td>
 	</tr>

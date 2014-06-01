@@ -13,8 +13,7 @@ CREATE TABLE `sturesy_lectures` (
   `date` datetime NOT NULL,
   `token` char(40) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `lecture` (`lecture`),
-  UNIQUE KEY `token` (`token`)
+  UNIQUE KEY `lecture` (`lecture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 DROP TABLE IF EXISTS `sturesy_question`;
