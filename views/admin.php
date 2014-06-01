@@ -152,7 +152,7 @@ class admin
     function javascriptForLectureCreation()
     {
         return '
-                function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'icon-ok\'>").removeAttr("style"):$("#lecturefree").html("<i class=\'icon-remove\'>").removeAttr("style")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html("").css("visibility","hidden"):e.length<4?$("#lecturefree").html("too short").removeAttr("style"):checkLecture(e)});
+                function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'glyphicon glyphicon-ok\'>"):$("#lecturefree").html("<i class=\'glyphicon glyphicon-remove\'>")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html("").css("visibility","hidden"):e.length<4?$("#lecturefree").html("too short"):checkLecture(e)});
                 ';
     }
 
@@ -249,6 +249,7 @@ class admin
                 show_error("Couldn't create LectureID");
             }
 
+            $this->javascriptCode = $this->javascriptForLectureCreation();
             show_lecture_id_create_dialog(array("", $pwd, $owner, $email));
         }
 

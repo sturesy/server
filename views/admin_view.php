@@ -32,15 +32,17 @@ function show_login_form()
     ?>
 <form class="form-signin" method="post">
 	<h2 class="form-signin-heading">Admin Panel</h2>
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-chevron-right"></i></span>
-		<input class="span3" type="text" name="login_user" placeholder="Username"/>
+	<div class="input-group">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+		<input class="form-control" name="login_user" placeholder="Username" type="text">
 	</div>
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-chevron-right"></i></span>
-		<input class="span3" type="password" name="login_password" placeholder="Password"/>
+    <p></p>
+	<div class="input-group">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+		<input class="form-control" name="login_password" placeholder="Password" type="password">
 	</div>
-	<input type="submit" class="btn btn-primary btn-large btn-block" value="Login"/>
+    <p></p>
+	<input class="btn btn-primary btn-block btn-lg" value="Login" type="submit">
 </form>
 <?php
 } 
@@ -52,18 +54,19 @@ function show_login_form()
 function show_navbar()
 {
     ?>
-<div class="row-fluid"> <!-- row-fluid begin-->
-	<div class="span2"><!-- navbar begin -->
-    	<div class="well sidebar-nav">
-        	<ul class="nav nav-list">
-              <li class="nav-header">Administration</li>
+<div class="container-fluid">
+    <div class="row"> <!-- row-fluid begin-->
+	<div class="col-xs-5 col-sd-3 col-md-3 col-lg-2"><!-- navbar begin -->
+    	<div class="well sidebar">
+        	<ul class="nav nav-sidebar">
+              <li class="text-center"><h4>Administration</h4></li>
               <li><a href="?admin=creation">Creation</a></li>
               <li><a href="?admin=overview">Overview</a></li>
-              <li><a href="?admin=logout">Logout</a></li>
+              <li><a href="?admin=logout" style="color:red;">Logout</a></li>
             </ul>
         </div>
     </div><!-- navbar end -->
-    <div class="span9" id="pagebody"> <!-- pagebody begin -->
+    <div class="col-xs-7 col-sd-9 col-md-9 col-lg-10" id="pagebody"> <!-- pagebody begin -->
 <?php
 } 
 
@@ -71,6 +74,7 @@ function show_navbar()
 function close_page_body()
 {
 ?>
+        </div>
     </div><!-- pagebody end -->
 </div><!-- row-fluid end-->
 <?php 
@@ -83,31 +87,33 @@ function close_page_body()
 function show_lecture_id_create_dialog($fieldvalues = array("","","",""))
 {
 ?>
+<div class="col-sd-4 col-md-4 col-lg-4">
 <form method="post" id="createdialog">
 	<h2>Lecture-ID Creation</h2>
-	<div class="input-prepend input-append">
-		<span class="add-on"><i class="icon-chevron-right"></i></span>
-		<input type="text" name="lecture" placeholder="Lecture-ID" value="<?php echo $fieldvalues[0]?>" id="lecturefield"/>
-		<span class="add-on" id="lecturefree" style="visibility:hidden" >text</span>
+	<div class="input-group input-prepend input-append">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+		<input class="form-control" type="text" name="lecture" placeholder="Lecture-ID" value="<?php echo $fieldvalues[0]?>" id="lecturefield" required="required"/>
+		<span class="input-group-addon" id="lecturefree"></span>
 	</div>
 	<br/>
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-chevron-right"></i></span>
-		<input type="password" name="password" placeholder="Password for Lecture" value="<?php echo $fieldvalues[1]?>"/>
+	<div class="input-group input-prepend">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+		<input class="form-control" type="password" name="password" placeholder="Password for Lecture" value="<?php echo $fieldvalues[1]?>" required="required"/>
 	</div>
 	<br/>
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-chevron-right"></i></span>
-		<input type="text" name="owner" placeholder="Owner of Lecture" value="<?php echo $fieldvalues[2]?>"/>
+	<div class="input-group input-prepend">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+		<input class="form-control" type="text" name="owner" placeholder="Owner of Lecture" value="<?php echo $fieldvalues[2]?>" required="required"/>
 	</div>
 	<br/>
-	<div class="input-prepend">
-		<span class="add-on"><i class="icon-chevron-right"></i></span>
-		<input type="text" name="email" placeholder="eMail" value="<?php echo $fieldvalues[3]?>"/>
+	<div class="input-group input-prepend">
+		<span class="input-group-addon"><i class="glyphicon glyphicon-chevron-right"></i></span>
+		<input class="form-control" type="email" name="email" placeholder="eMail" value="<?php echo $fieldvalues[3]?>" required="required"/>
 	</div>
 	<br/>
 	<input type="submit" class="btn btn-primary" value="Create Lecture-ID"/>
 </form>
+</div>
 <?php
 }
 
