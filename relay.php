@@ -20,6 +20,8 @@
 include("config.php");
 include_once("functions.php");
 
+global $connection; // TODO REPLACE DATABASE CLASS
+
 if(isset($_REQUEST["data"]) && isset($_REQUEST["hash"]))
 {
     $key = $_REQUEST["hash"];
