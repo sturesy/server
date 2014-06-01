@@ -18,39 +18,44 @@
  */
 
 
-
-/**
- * IMPORTANT!!! If your PHP-Installation does not support mysqli or you get a blank index-page
- * switch the databaseclass to databaseclas_old
- */
-include("databaseclass.php");
-//include("databaseclass_old.php"); // uncomment this line to switch to older mysql-versions
-
 /**
  * By specifying an adminpassword, only users with access to the
- * password will be able to login to the admin panel
+ * password will be able to login to the admin panel.
  */
-$admin_password = "CHANGEME!!!";
+$admin_password = "test";
 
 
 /**
  * The encryption key is being used for native apps, to prevent "spamming".
- * This can be any arbitrary combination of letters, numbers and special characters
+ * This can be any arbitrary combination of letters, numbers and special characters.
+ * 
+ * Length of key must be 16 characters!
  */
 $encryption_key =  "0011223344556677";
 
 /**
  * Setup-Guide for MySQL:
  *
- * Step 1: Edit mysql_host, _db, _user and _pw to match your MySQL-Setup
- * Step 2: Done!
+ * - Edit mysql_host, _db, _user and _pw to match your MySQL-Setup
  *
  */
-$mysql_host ="localhost";
-$mysql_db = "test"; //Databasename
-$mysql_user = "test"; // MySQL-Username
-$mysql_pw = "test"; // Password for Username
+$mysql_host = "localhost";  // Host Address
+$mysql_db   = "sturesy";    // Databasename
+$mysql_user = "username";   // MySQL-Username
+$mysql_pw   = "password";   // Password for Username
+global $connection;
 
-$database = new mysqlconnection($mysql_host, $mysql_user, $mysql_pw, $mysql_db);
 
+if (version_compare(phpversion(), '5.3.0', '<')) 
+{
+    include_once 'database/MySQLDatabase.php';
+    $connection = new MySQLDatabase($mysql_host, $mysql_user, $mysql_pw, $mysql_db);
+}
+else
+{
+    include_once 'database/MySQL_i_Database.php';
+    $connection = new MySQLiDatabase($mysql_host, $mysql_user, $mysql_pw, $mysql_db);
+}
+
+    
 ?>
