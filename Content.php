@@ -26,9 +26,9 @@ class Content
 
     function __construct($user_id_cookie)
     {
-        include_once 'config.php';
-
-        $this->databaseconnection = getConnection();
+        include 'config.php';
+        global $connection;
+        $this->databaseconnection = $connection;
 
         $this->user_id_cookie = $user_id_cookie;
 

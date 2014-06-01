@@ -17,6 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+include_once 'DatabaseConnectionInterface.php';
 
 class MySQLDatabase implements DatabaseConnection
 {
@@ -87,9 +88,10 @@ class MySQLDatabase implements DatabaseConnection
         $query = "SELECT id FROM sturesy_lectures WHERE lecture ='$lecture_name'";
 
         $result = mysql_query($query, $this->mysql);
-        $lectureName = mysql_fetch_row($result)[0];
+        $lectureid = mysql_fetch_row($result);
         mysql_free_result($result);
-        return $lectureName;
+        
+        return $lectureid[0];
     }
     
     function createNewLectureID($name, $password, $owner, $email)

@@ -21,9 +21,12 @@ if(isset($_REQUEST["query"]))
 {
     $INDEXPHPWASACCESSED = true;
     session_start();
+    
     include_once 'config.php';
+    global $connection;
+    $dbcon = $connection;
+
     include_once 'views/admin_view.php';
-    $dbcon = getConnection();
 
     if (isset($_SESSION["sturesy_login"]) && $_SESSION["sturesy_login"] == 1)
     {

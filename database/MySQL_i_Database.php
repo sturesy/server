@@ -30,7 +30,12 @@ class MySQLiDatabase implements DatabaseConnection
 
     function __destruct()
     {
-        $this->mysqli->close();
+        if(!ini_get("mysqli.allow_persistent"))
+        {
+            // connection pooling is disallowed
+            // so closing connection manually
+            $this->mysqli->close();
+        }
     }
 
     
@@ -93,10 +98,10 @@ class MySQLiDatabase implements DatabaseConnection
         $query = "SELECT id FROM sturesy_lectures WHERE lecture ='$lecture_name'";
 
         $result = $this->mysqli->query($query);
-        $lectureName = $result->fetch_row()[0];
+        $lectureid = $result->fetch_row();
         $result->close();
 
-        return $lectureName;
+        return $lectureid[0];
     }
 
 
