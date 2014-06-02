@@ -80,7 +80,10 @@ function get($json)
 
 function update($json)
 {
-    update_lecture_type($json);
+    if(isset($json["target"]) && $json["target"] == "feedback")
+        update_feedback_sheet($json);
+    else
+        update_lecture_type($json);
 }
 
 function clean($json)
@@ -181,6 +184,18 @@ function verify_integrity($base64, $json, $hash)
     $sha = hash_hmac("SHA256", $base64, $lkey); 
 
     return ($sha === $hash);
+}
+
+/***
+ * Updates a feedback sheet for a lecture id
+ * @param array $json Submitted JSON data
+ * @return bool Was the update successful
+ */
+function update_feedback_sheet($json)
+{
+    global $connection;
+    $result = $connection->updateFeedbackSheetForLecture($json["name"], $json["sheet"]);
+    echo($result == true ? "OK" : "ERROR");
 }
 
 ?>

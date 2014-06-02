@@ -305,4 +305,14 @@ class MySQLiDatabase implements DatabaseConnection
         return $r[0];
     }
 
+    function updateFeedbackSheetForLecture($lecturename, $sheet)
+    {
+        $lectureid = $this->getLectureIDFromName($lecturename);
+        $sheet = $this->mysqli->real_escape_string(json_encode($sheet));
+
+        $query = "INSERT INTO sturesy_fbsheets (lectureid, sheet) VALUES ($lectureid, '$sheet')";
+
+        $result = $this->mysqli->query($query);
+        return $result;
+    }
 }

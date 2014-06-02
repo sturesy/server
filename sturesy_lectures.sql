@@ -35,3 +35,10 @@ CREATE TABLE `sturesy_votes` (
   `date` datetime NOT NULL,
   PRIMARY KEY (`guid`,`lid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+DROP TABLE IF EXISTS `sturesy_fbsheets`;
+CREATE TABLE `sturesy_fbsheets` (
+  `lectureid` int(11) NOT NULL,
+  `sheet` text NOT NULL,
+  PRIMARY KEY (`lectureid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
