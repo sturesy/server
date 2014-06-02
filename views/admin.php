@@ -152,7 +152,7 @@ class admin
     function javascriptForLectureCreation()
     {
         return '
-                function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'glyphicon glyphicon-ok\'>"):$("#lecturefree").html("<i class=\'glyphicon glyphicon-remove\'>")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html("").css("visibility","hidden"):e.length<4?$("#lecturefree").html("too short"):checkLecture(e)});
+                function checkLecture(e){$.post("rest.php?query=checklecture&lecture="+e,function(e){"true"===e?$("#lecturefree").html("<i class=\'glyphicon glyphicon-ok\'>"):$("#lecturefree").html("<i class=\'glyphicon glyphicon-remove\'>")})}$("#lecturefield").keyup(function(){var e=$("#lecturefield").val();0==e.length?$("#lecturefree").html(""):e.length<4?$("#lecturefree").html("too short"):checkLecture(e)});
                 ';
     }
 
@@ -160,11 +160,12 @@ class admin
     {
         $user = $_POST["login_user"];
         $pwd = $_POST["login_password"];
+        
+        global $admin_password;
 
-        if($user === "admin" && $pwd === "test")
+        if($user === "admin" && $pwd === $admin_password)
         {
             $_SESSION["sturesy_login"] = 1;
-
 
             $this->handleUserIsLoggedIn();
         }
@@ -196,7 +197,7 @@ class admin
                 {
                     $this->javascriptCode = $this->javascriptForTableReload();
                     show_navbar();
-                    show_lecture_table($this->databaseconnection->getLectureIDAdminInfos(), true);
+                    show_lecture_table($this->databaseconnection->getLectureIDAdminInfos("lecture"), true);
                     break;
                 }
             case "creation":

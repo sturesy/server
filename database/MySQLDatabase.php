@@ -157,6 +157,13 @@ class MySQLDatabase implements DatabaseConnection
         return false;
     }
     
-
+    // ========================================
+    // Relay.php functions:
+    // ========================================
+    
+    function getVotesForLectureAndMarkFetched($lecturename)
+    {
+    
+    }
 
 }

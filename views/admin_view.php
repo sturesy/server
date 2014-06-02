@@ -151,17 +151,17 @@ foreach ($values as $row)
     $token = $row[4];
     if(!$token)
     {
-        $token = "<span class='label'>Token already redeemed</span><button class='btn btn-mini' onclick=\"renewToken('$row[0]','$row[1]')\">Renew Token</button>";
+        $token = "<span class='label label-default'>Token already redeemed</span><button class='btn btn-default btn-xs' onclick=\"renewToken('$row[0]','$row[1]')\">Renew Token</button>";
     }
     else
     {
-        $token ="<span class='label label-info'>Token: $token</span>" ;
+        $token ="<span class='label label-success'>Token: $token</span>" ;
     }
     ?>
     <tr>
         <td><?php echo $row[0]?></td>
         <td><?php echo $row[1]?></td>
-        <td><?php echo $row[2]?></td>
+        <td><a href="mailto:<?php echo $row[2]?>"><?php echo $row[2]?></a></td>
         <td><p class="text-center"><?php echo $row[3]?></p></td>
         <td><?php echo $token?></td>
     </tr>

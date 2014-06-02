@@ -56,5 +56,19 @@ interface DatabaseConnection
     function generateNewTokenForLectureID($lecture,$owner,$date);
     
     function isLectureIDFree($lectureid);
+    
+    // ========================================
+    // Relay.php functions:
+    // ========================================
+    
+    function getVotesForLectureAndMarkFetched($lecturename);
+    
+    function removeVotesForLecture($lecturename);
+    
+    function updateQuestionForLecture($lecturename, $question, $answers, $type, $correctanswers);
+    
+    function fetchInformationForTokenRedemption($token);
+    
+    function fetchKeyForLecture($lecturename);
 
 }

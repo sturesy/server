@@ -22,8 +22,8 @@
  */
 function get_id_cookie()
 {
-
 	global $encryption_key;
+	
 
 	if(!isset($_COOKIE["id"]))
 	{
@@ -95,20 +95,20 @@ function reload_page_httpbodymod($time)
 
 function fnEncrypt($sValue)
 {
-	global $encryptionKey;
+	global $encryption_key;
 	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 	$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-	return trim(base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $sValue, MCRYPT_MODE_CBC, $iv)));
+	return trim(base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryption_key, $sValue, MCRYPT_MODE_CBC, $iv)));
 }
 
 function fnDecrypt($sValue)
 {
-	global $encryptionKey;
+	global $encryption_key;
 	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 	$sValue = base64_decode($sValue);
 	$iv_dec = substr($sValue, 0, $iv_size);
 	$ciphertext_dec = substr($sValue, $iv_size);
-	$val = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec));
+	$val = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryption_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec));
 	return $val;
 }
 
