@@ -74,13 +74,19 @@ function get($json)
 {
     if(isset($json["name"]))
     {
-        echo query_all_votes($json["name"]);
+        if(isset($json["target"]))
+        {
+            if($json["target"] == "fbsheet")
+                echo get_feedback_sheet($json);
+        }
+        else
+            echo query_all_votes($json["name"]);
     }
 }
 
 function update($json)
 {
-    if(isset($json["target"]) && $json["target"] == "feedback")
+    if(isset($json["target"]) && $json["target"] == "fbsheet")
         update_feedback_sheet($json);
     else
         update_lecture_type($json);
@@ -196,6 +202,18 @@ function update_feedback_sheet($json)
     global $connection;
     $result = $connection->updateFeedbackSheetForLecture($json["name"], $json["sheet"]);
     echo($result == true ? "OK" : "ERROR");
+}
+
+/***
+ * Returns the Feedback Sheet as a JSON String
+ * @param array $json Submitted JSON data
+ * @return string Feedback Sheet as JSON String
+ */
+function get_feedback_sheet($json)
+{
+    global $connection;
+    $result = $connection->getFeedbackSheetForLecture($json["name"]);
+    return $result;
 }
 
 ?>

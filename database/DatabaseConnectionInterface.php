@@ -73,4 +73,6 @@ interface DatabaseConnection
 
     function updateFeedbackSheetForLecture($lecturename, $sheet);
 
+    function getFeedbackSheetForLecture($lecture);
+
 }

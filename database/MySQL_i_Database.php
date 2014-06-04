@@ -310,9 +310,22 @@ class MySQLiDatabase implements DatabaseConnection
         $lectureid = $this->getLectureIDFromName($lecturename);
         $sheet = $this->mysqli->real_escape_string(json_encode($sheet));
 
-        $query = "INSERT INTO sturesy_fbsheets (lectureid, sheet) VALUES ($lectureid, '$sheet')";
+        $query = "REPLACE INTO sturesy_fbsheets (lectureid, sheet) VALUES ($lectureid, '$sheet')";
 
         $result = $this->mysqli->query($query);
         return $result;
+    }
+
+    function getFeedbackSheetForLecture($lecture)
+    {
+        $lectureid = $this->getLectureIDFromName($lecture);
+
+        $query = "SELECT sheet FROM sturesy_fbsheets WHERE lectureid = '$lectureid'";
+
+        $result = $this->mysqli->query($query);
+        $r = $result ->fetch_array();
+        $result->free;
+
+        return $r[0];
     }
 }
