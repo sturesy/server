@@ -32,10 +32,18 @@ class Content
 
         $this->user_id_cookie = $user_id_cookie;
 
-        if(isset($_GET["lecture"]))
+        if(isset($_GET["lecture"]) && isset($_GET["action"]))
         {
-            include_once 'views/lecture.php';
-            $this->subcontent = new lecture($this->databaseconnection, $this->user_id_cookie);
+            switch($_GET["action"]) {
+                case "vote":
+                    include_once 'views/lecture.php';
+                    $this->subcontent = new lecture($this->databaseconnection, $this->user_id_cookie);
+                    break;
+                case "feedback_sheet":
+                    include_once 'views/feedback_sheet.php';
+                    $this->subcontent = new feedback_sheet($this->databaseconnection, $this->user_id_cookie);
+                    break;
+            }
         }
         else if(isset($_GET["admin"]))
         {
