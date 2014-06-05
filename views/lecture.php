@@ -62,10 +62,10 @@ class lecture
     function display()
     {
         $this->lecture_infos = $this->databaseconnection->getVotingInformationForLecture($this->lecture_name);
-         
+
         if($this->lecture_infos === NULL)
         {
-            $msg;
+            $msg = "";
             if(!isset($this->lecture_name) || strlen($this->lecture_name) == 0)
             {
                 $msg = "Please enter a Lecture-ID";
