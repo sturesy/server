@@ -305,27 +305,47 @@ class MySQLiDatabase implements DatabaseConnection
         return $r[0];
     }
 
+    function clearSheetForLectureId($lectureid)
+    {
+        $query = "DELETE FROM sturesy_fbsheets WHERE lid = '$lectureid'";
+        $this->mysqli->query($query);
+    }
+
     function updateFeedbackSheetForLecture($lecturename, $sheet)
     {
         $lectureid = $this->getLectureIDFromName($lecturename);
-        $sheet = $this->mysqli->real_escape_string(json_encode($sheet));
+        $this->clearSheetForLectureId($lectureid);
 
-        $query = "REPLACE INTO sturesy_fbsheets (lectureid, sheet) VALUES ($lectureid, '$sheet')";
+        $query = "INSERT INTO sturesy_fbsheets (lid, title, description, type, mandatory, extra) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->mysqli->prepare($query);
 
-        $result = $this->mysqli->query($query);
-        return $result;
+        $this->mysqli->query("START TRANSACTION");
+        foreach ($sheet as $currentsheet) {
+            $title = $currentsheet["title"];
+            $desc = $currentsheet["desc"];
+            $type = $currentsheet["type"];
+            $mandatory = (int)$currentsheet["mandatory"];
+            $extra = $currentsheet["extra"];
+
+            $stmt->bind_param("isssis", $lectureid, $title, $desc, $type, $mandatory, $extra);
+            $stmt->execute();
+        }
+        $stmt->close();
+        $this->mysqli->query("COMMIT");
     }
 
     function getFeedbackSheetForLecture($lecture)
     {
         $lectureid = $this->getLectureIDFromName($lecture);
 
-        $query = "SELECT sheet FROM sturesy_fbsheets WHERE lectureid = '$lectureid'";
+        $query = "SELECT fbid, title, description, type, mandatory, extra FROM sturesy_fbsheets WHERE lid = '$lectureid'";
 
         $result = $this->mysqli->query($query);
-        $r = $result ->fetch_array();
-        $result->free;
 
-        return $r[0];
+        $rows = array();
+        while(($row = $result->fetch_array(MYSQL_ASSOC)))
+            $rows[] = $row;
+
+        return $rows;
     }
 }

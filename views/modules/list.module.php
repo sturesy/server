@@ -30,11 +30,18 @@ class listmodule implements IModule
     {
 ?>
     <div class="text-center">
-        <p>Pick one of the following</p>
+        <p><?php echo $this->values["text"]?></p>
         <p>
-        <?php foreach($this->values["elements"] as $value){?>
-	        <button type="button" class="btn-primary btn-sm" name="<?php echo $this->id?>" id="<?php echo $this->id?>"><?php echo $value?></button>
-        <?php }?>
+            <div class="btn-group" data-toggle="buttons">
+            <?php
+            $selectionCounter = 1;
+            foreach($this->values["elements"] as $value){?>
+                <label class="btn btn-primary">
+                    <input type="radio" name="<?php echo $this->id?>" value="<?php echo $selectionCounter;?>" id="<?php echo $this->id?>"><?php echo $value?>
+                </label>
+            <?php $selectionCounter++;
+            }?>
+            </div>
 	    </p>
     </div>
 <?php 
