@@ -36,9 +36,27 @@ CREATE TABLE `sturesy_votes` (
   PRIMARY KEY (`guid`,`lid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
-DROP TABLE IF EXISTS `sturesy_fbsheets`;
-CREATE TABLE `sturesy_fbsheets` (
-  `lectureid` int(11) NOT NULL,
-  `sheet` text NOT NULL,
-  PRIMARY KEY (`lectureid`)
+CREATE TABLE IF NOT EXISTS `sturesy_fb` (
+  `fbid` int(11) NOT NULL,
+  `guid` varchar(60) NOT NULL,
+  `response` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `sturesy_fb`
+ADD PRIMARY KEY (`fbid`,`guid`);
+
+CREATE TABLE IF NOT EXISTS `sturesy_fbsheets` (
+`fbid` int(11) NOT NULL,
+  `lid` int(11) NOT NULL,
+  `title` text NOT NULL,
+  `description` text,
+  `type` varchar(60) NOT NULL,
+  `mandatory` tinyint(1) NOT NULL,
+  `extra` text
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+
+ALTER TABLE `sturesy_fbsheets`
+ADD PRIMARY KEY (`fbid`);
+
+ALTER TABLE `sturesy_fbsheets`
+MODIFY `fbid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
