@@ -313,6 +313,7 @@ class MySQLiDatabase implements DatabaseConnection
 
     function updateFeedbackSheetForLecture($lecturename, $sheet)
     {
+        $success = true;
         $lectureid = $this->getLectureIDFromName($lecturename);
         $this->clearSheetForLectureId($lectureid);
 
@@ -329,9 +330,11 @@ class MySQLiDatabase implements DatabaseConnection
 
             $stmt->bind_param("isssis", $lectureid, $title, $desc, $type, $mandatory, $extra);
             $stmt->execute();
+            $success &= ($stmt->error == 0);
         }
         $stmt->close();
         $this->mysqli->query("COMMIT");
+        return $success;
     }
 
     function getFeedbackSheetForLecture($lecture)

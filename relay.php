@@ -213,7 +213,7 @@ function get_feedback_sheet($json)
 {
     global $connection;
     $result = $connection->getFeedbackSheetForLecture($json["name"]);
-    return $result;
+    return json_encode($result);
 }
 
 ?>
