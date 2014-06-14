@@ -43,7 +43,7 @@ class textarea implements IModule
         ?>
 	    <div class="text-center">
 	        <p><?php echo $this->values["description"]?></p>
-	        <textarea rows="5" class="form-control" <?php echo $maxlength?> name="<?php echo $this->id?>" id="<?php echo $this->id?>"></textarea>
+	        <textarea rows="5" class="form-control" <?php echo $maxlength?> name="<?php echo $this->id?>" id="<?php echo $this->id?>"><?php if(isset($this->values["input"])) echo $this->values["input"];?></textarea>
 	        <p><span id='<?php echo "addon-".$this->id;?>'><?php echo $length !== false ? "Remaining characters: ".$length : "";?></span></p>
 	        <p></p>
 	    </div>

@@ -20,7 +20,10 @@ class listmodule implements IModule
      */
     public function javascript()
     {
-        return "";
+        if(isset($this->values["input"])) {
+            return "$('#" . $this->id . "-" . $this->values["input"] . "').button('toggle');";
+        }
+        else return "";
     }
 
     /**
@@ -36,9 +39,8 @@ class listmodule implements IModule
             <?php
             $selectionCounter = 1;
             foreach($this->values["elements"] as $value){?>
-                <label class="btn btn-primary">
-                    <input type="radio" name="<?php echo $this->id?>" value="<?php echo $selectionCounter;?>" id="<?php echo $this->id?>"><?php echo $value?>
-                </label>
+                <label class="btn btn-primary" id="<?php echo $this->id."-".$value?>">
+                    <input type="radio" name="<?php echo $this->id?>" value="<?php echo $selectionCounter;?>"><?php echo $value?></label>
             <?php $selectionCounter++;
             }?>
             </div>

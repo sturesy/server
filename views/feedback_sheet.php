@@ -41,6 +41,7 @@ class feedback_sheet
     {
         $this->databaseconnection = $databaseconnection;
         $this->user_id_cookie = $user_id_cookie;
+        $this->js = "";
     }
     function __destruct()
     {
@@ -52,10 +53,10 @@ class feedback_sheet
         $this->sheet = $this->databaseconnection->getFeedbackSheetForLecture($this->lecture_name);
     }
 
-    function panelwithmodule($item, $module)
+    function panelwithmodule($item, $module, $mark)
     {
         ?>
-        <div class="panel panel-default">
+        <div class="panel panel-default <?php echo $mark ? "panel-danger" : "";?>">
             <div class="panel-heading">
                 <?php
                 if($item["mandatory"] == true)
@@ -70,32 +71,47 @@ class feedback_sheet
     <?php
     }
 
-    function displaySheet()
+    function displaySheet($forgottenItems = null)
     {
         ?>
         <div class="container">
+            <?php
+                if($forgottenItems != null && count($forgottenItems) > 0) {
+                    ?>
+                    <div class="alert alert-danger alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        <strong>Warning!</strong> Some mandatory fields have not been filled out. Please re-check your submission.
+                    </div>
+                    <?php
+                }
+            ?>
             <form role="form" method="post" action="index.php?action=feedback_sheet&lecture=<?php echo $this->lecture_name;?>">
+                <input type="hidden" name="submitfeedback">
                 <?php
+                // display each item of feedback sheet
                 foreach($this->sheet as $entry)
                 {
                     $mod = null;
 
                     // extract sheet data
-                    $values["text"] = nl2br($entry["description"]);
-                    $index = $entry["fbid"];
+                    $values["description"] = nl2br($entry["description"]);
+                    $fbid = $entry["fbid"];
+                    if(isset($entry["input"]))
+                        $values["input"] = $entry["input"];
 
                     switch($entry["type"]) {
                         case "comment":
-                            $mod = new textarea($values, $index);
+                            $mod = new textarea($values, $fbid);
                             break;
                         case "grades":
                             $values["elements"] = array(1, 2, 3, 4, 5, 6);
-                            $mod = new listmodule($values, $index);
+                            $mod = new listmodule($values, $fbid);
                             break;
                     }
                     if($mod != null) {
-                        echo $mod->javascript();
-                        $this->panelwithmodule($entry, $mod);
+                        $markPanel = $forgottenItems != null && in_array($entry["fbid"], $forgottenItems);
+                        $this->panelwithmodule($entry, $mod, $markPanel);
+                        $this->js .= $mod->javascript() . "\n";
                     }
                 }
                 ?>
@@ -105,9 +121,41 @@ class feedback_sheet
     <?php
     }
 
+    function processSubmission()
+    {
+        // have all the mandatory items been responsed to?
+        $forgottenItems = array();
+        foreach($this->sheet as $entry) {
+            $fbid = $entry["fbid"];
+
+            // re-enter previous data if available
+            if(isset($_POST[$fbid])) {
+                $this->sheet[$fbid]["input"] = $_POST[$fbid];
+            }
+            // determine mandatory items that have not been responded to
+            else if($entry["mandatory"] && (!isset($_POST[$fbid]) || $_POST[$fbid] == "")) {
+                $forgottenItems[] = $fbid;
+            }
+        }
+
+        // redisplay form and mark items that are mandatory
+        if(count($forgottenItems) > 0) {
+            $this->displaySheet($forgottenItems);
+        }
+        else {
+            echo "success!<br/>\n";
+            var_dump($_POST);
+        }
+    }
+
     function display()
     {
-        $this->displaySheet();
+        // have we received a filled out form?
+        if(isset($_POST["submitfeedback"])) {
+            $this->processSubmission();
+        }
+        else
+            $this->displaySheet();
     }
 
     /**
@@ -126,7 +174,7 @@ class feedback_sheet
      */
     function additionalJavascript()
     {
-        return ""; // additional javascript
+        return $this->js; // additional javascript
     }
 
     /**
