@@ -30,7 +30,7 @@ class listmodule implements IModule
     {
 ?>
     <div class="text-center">
-        <p><?php echo $this->values["text"]?></p>
+        <p><?php echo $this->values["description"]?></p>
         <p>
             <div class="btn-group" data-toggle="buttons">
             <?php
