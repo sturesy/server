@@ -121,6 +121,20 @@ class feedback_sheet
     <?php
     }
 
+    function displaySuccessPage()
+    {
+        ?>
+        <div class="container">
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading">Submission completed</div>
+                <div class="panel-body">
+                    <strong>Thank you.</strong> Your feedback has been submitted and will be processed.
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+
     function processSubmission()
     {
         // have all the mandatory items been responsed to?
@@ -143,8 +157,13 @@ class feedback_sheet
             $this->displaySheet($forgottenItems);
         }
         else {
-            echo "success!<br/>\n";
-            var_dump($_POST);
+            $results = array();
+            foreach($this->sheet as $entry) {
+                if(isset($entry["input"]))
+                    $results[] = array("input" => $entry["input"], "fbid" => $entry["fbid"]);
+            }
+            $this->databaseconnection->submitFeedbackForLecture($this->lecture_name, $this->user_id_cookie, $results);
+            $this->displaySuccessPage();
         }
     }
 
@@ -154,8 +173,12 @@ class feedback_sheet
         if(isset($_POST["submitfeedback"])) {
             $this->processSubmission();
         }
-        else
-            $this->displaySheet();
+        else {
+            if($this->databaseconnection->userHasSubmittedForLecture($this->lecture_name, $this->user_id_cookie))
+                $this->displaySuccessPage();
+            else
+                $this->displaySheet();
+        }
     }
 
     /**

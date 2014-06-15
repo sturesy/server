@@ -330,7 +330,7 @@ class MySQLiDatabase implements DatabaseConnection
 
             $stmt->bind_param("isssis", $lectureid, $title, $desc, $type, $mandatory, $extra);
             $stmt->execute();
-            $success &= ($stmt->error == 0);
+            $success &= ($stmt->errno == 0);
         }
         $stmt->close();
         $this->mysqli->query("COMMIT");
@@ -347,8 +347,45 @@ class MySQLiDatabase implements DatabaseConnection
 
         $rows = array();
         while(($row = $result->fetch_array(MYSQL_ASSOC)))
-            $rows[] = $row;
+            $rows[$row["fbid"]] = $row; // index by feedback id
 
         return $rows;
+    }
+
+    function submitFeedbackForLecture($lecture, $guid, $responses)
+    {
+        $success = true;
+        $lectureid = $this->getLectureIDFromName($lecture);
+        $query = "INSERT INTO sturesy_fb (fbid, guid, response) VALUES (?, ?, ?)";
+        $stmt = $this->mysqli->prepare($query);
+
+        $this->mysqli->query("START TRANSACTION");
+        foreach ($responses as $response) {
+            $fbid = $response["fbid"];
+            $input = $response["input"];
+
+            $stmt->bind_param("iss", $fbid, $guid, $input);
+            $stmt->execute();
+            $success &= ($stmt->errno == 0);
+        }
+        $stmt->close();
+        $this->mysqli->query("COMMIT");
+
+        return $success;
+    }
+
+    function userHasSubmittedForLecture($lecture, $guid)
+    {
+        $lectureid = $this->getLectureIDFromName($lecture);
+        $query = "SELECT count(1) FROM sturesy_fb INNER JOIN sturesy_fbsheets USING(fbid) WHERE lid = ? AND guid = ? LIMIT 1";
+        $stmt = $this->mysqli->prepare($query);
+        $stmt->bind_param("is", $lectureid, $guid);
+        $stmt->execute();
+
+        $stmt->bind_result($count);
+        $stmt->fetch();
+        $stmt->close();
+
+        return $count > 0;
     }
 }
