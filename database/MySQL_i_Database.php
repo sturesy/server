@@ -388,4 +388,20 @@ class MySQLiDatabase implements DatabaseConnection
 
         return $count > 0;
     }
+
+    function getFeedbackForLecture($lecture)
+    {
+        $lectureid = $this->getLectureIDFromName($lecture);
+        $query = "SELECT fbid, guid, response FROM sturesy_fb JOIN sturesy_fbsheets USING (fbid) WHERE lid = '$lectureid'";
+
+        $result = $this->mysqli->query($query);
+
+        $rows = array();
+        while(($row = $result->fetch_array(MYSQL_ASSOC))) {
+            $fbid = $row["fbid"];
+            unset($row["fbid"]);
+            $rows[$fbid][] = $row; // index by feedback id
+        }
+        return $rows;
+    }
 }

@@ -78,6 +78,8 @@ function get($json)
         {
             if($json["target"] == "fbsheet")
                 echo get_feedback_sheet($json);
+            else if($json["target"] == "fb")
+                echo get_feedback($json);
         }
         else
             echo query_all_votes($json["name"]);
@@ -187,7 +189,7 @@ function verify_integrity($base64, $json, $hash)
         global $connection;
         $lkey = $connection->fetchKeyForLecture($json["name"]);
     }
-    $sha = hash_hmac("SHA256", $base64, $lkey); 
+    $sha = hash_hmac("SHA256", $base64, $lkey);
 
     return ($sha === $hash);
 }
@@ -214,6 +216,21 @@ function get_feedback_sheet($json)
     global $connection;
     $result = $connection->getFeedbackSheetForLecture($json["name"]);
     return json_encode($result);
+}
+
+/***
+ * Returns the user-submitted feedback to a lecture
+ * @param $json Submitted JSON data
+ * @return string Collected feedbac
+ */
+function get_feedback($json)
+{
+    // turn on gzip compression
+    if (extension_loaded("zlib") && (ini_get("output_handler") != "ob_gzhandler")) {
+        ini_set("zlib.output_compression", "On");
+    }
+    global $connection;
+    return json_encode($connection->getFeedbackForLecture($json["name"]));
 }
 
 ?>

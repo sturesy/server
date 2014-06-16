@@ -79,4 +79,5 @@ interface DatabaseConnection
 
     function userHasSubmittedForLecture($lecture, $guid);
 
+    function getFeedbackForLecture($lecture);
 }
