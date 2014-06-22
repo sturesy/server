@@ -32,7 +32,7 @@ class Content
 
         $this->user_id_cookie = $user_id_cookie;
 
-        if(isset($_GET["lecture"]) && isset($_GET["action"]))
+        if(isset($_GET["lecture"]) && $_GET["lecture"] != "" && isset($_GET["action"]))
         {
             switch($_GET["action"]) {
                 case "vote":

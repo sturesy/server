@@ -1,3 +1,13 @@
+<?php
+// Display alert messages (if there are any)
+if(isset($_SESSION["alert"])) {
+    $message = $_SESSION["alert"];
+    echo "<div class=\"container\">";
+    echo "<div class=\"alert alert-info\">$message<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button></div>";
+    echo "</div>";
+    unset($_SESSION["alert"]);
+}
+?>
 <form class="form-signin" id="loginform">
     <input type="hidden" name="action" id="action" value="vote">
 	<h2 class="form-signin-heading text-center">Vote</h2>
