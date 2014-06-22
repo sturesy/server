@@ -349,7 +349,7 @@ class MySQLiDatabase implements DatabaseConnection
         while(($row = $result->fetch_array(MYSQL_ASSOC))) {
             $row["fbid"] = (int)$row["fbid"];
             $row["mandatory"] = (int)$row["mandatory"];
-            $rows[] = $row; // index by feedback id
+            $rows[$row["fbid"]] = $row; // index by feedback id
         }
 
         return $rows;

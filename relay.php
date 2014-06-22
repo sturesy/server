@@ -215,7 +215,7 @@ function get_feedback_sheet($json)
 {
     global $connection;
     $result = $connection->getFeedbackSheetForLecture($json["name"]);
-    return json_encode($result);
+    return json_encode(array_values($result));
 }
 
 /***
