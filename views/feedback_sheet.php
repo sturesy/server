@@ -94,6 +94,7 @@ class feedback_sheet
                     $mod = null;
 
                     // extract sheet data
+                    $values = array();
                     $values["description"] = nl2br($entry["description"]);
                     $fbid = $entry["fbid"];
                     if(isset($entry["input"]))
