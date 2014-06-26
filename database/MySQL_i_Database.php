@@ -308,27 +308,30 @@ class MySQLiDatabase implements DatabaseConnection
     function clearSheetForLectureId($lectureid)
     {
         $query = "DELETE FROM sturesy_fbsheets WHERE lid = '$lectureid'";
-        $this->mysqli->query($query);
+        return $this->mysqli->query($query);
     }
 
     function updateFeedbackSheetForLecture($lecturename, $sheet)
     {
         $success = true;
         $lectureid = $this->getLectureIDFromName($lecturename);
-        $this->clearSheetForLectureId($lectureid);
 
-        $query = "INSERT INTO sturesy_fbsheets (lid, title, description, type, mandatory, extra) VALUES (?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO sturesy_fbsheets (fbid, lid, title, description, type, mandatory, extra, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE title=values(title), description=values(description), type=values(type),
+            mandatory=values(mandatory), extra=values(extra), position=values(position)";
         $stmt = $this->mysqli->prepare($query);
 
         $this->mysqli->query("START TRANSACTION");
         foreach ($sheet as $currentsheet) {
+            $fbid = $currentsheet["fbid"];
             $title = $currentsheet["title"];
             $desc = $currentsheet["desc"];
             $type = $currentsheet["type"];
             $mandatory = (int)$currentsheet["mandatory"];
             $extra = $currentsheet["extra"];
+            $position = $currentsheet["position"];
 
-            $stmt->bind_param("isssis", $lectureid, $title, $desc, $type, $mandatory, $extra);
+            $stmt->bind_param("iisssisi", $fbid, $lectureid, $title, $desc, $type, $mandatory, $extra, $position);
             $stmt->execute();
             $success &= ($stmt->errno == 0);
         }
@@ -341,7 +344,8 @@ class MySQLiDatabase implements DatabaseConnection
     {
         $lectureid = $this->getLectureIDFromName($lecture);
 
-        $query = "SELECT fbid, title, description, type, mandatory, extra FROM sturesy_fbsheets WHERE lid = '$lectureid'";
+        $query = "SELECT fbid, title, description, type, mandatory, extra FROM sturesy_fbsheets WHERE lid = '$lectureid'
+                    ORDER BY position ASC";
 
         $result = $this->mysqli->query($query);
 
@@ -355,10 +359,9 @@ class MySQLiDatabase implements DatabaseConnection
         return $rows;
     }
 
-    function submitFeedbackForLecture($lecture, $guid, $responses)
+    function submitFeedbackForLecture($guid, $responses)
     {
         $success = true;
-        $lectureid = $this->getLectureIDFromName($lecture);
         $query = "INSERT INTO sturesy_fb (fbid, guid, response) VALUES (?, ?, ?)";
         $stmt = $this->mysqli->prepare($query);
 
@@ -406,5 +409,18 @@ class MySQLiDatabase implements DatabaseConnection
             $rows[$fbid][] = $row; // index by feedback id
         }
         return $rows;
+    }
+
+    function deleteFeedbackItems($lecture, $ids)
+    {
+        $lectureid = $this->getLectureIDFromName($lecture);
+        $query = "DELETE FROM sturesy_fbsheets WHERE fbid = ? AND lid = ?";
+        $stmt = $this->mysqli->prepare($query);
+
+        foreach($ids as $id) {
+            $stmt->bind_param("ii", $id, $lectureid);
+            $stmt->execute();
+        }
+        $stmt->close();
     }
 }

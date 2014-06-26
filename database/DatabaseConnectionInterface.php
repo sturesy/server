@@ -75,9 +75,11 @@ interface DatabaseConnection
 
     function getFeedbackSheetForLecture($lecture);
 
-    function submitFeedbackForLecture($lecture, $guid, $responses);
+    function submitFeedbackForLecture($guid, $responses);
 
     function userHasSubmittedForLecture($lecture, $guid);
 
     function getFeedbackForLecture($lecture);
+
+    function deleteFeedbackItems($lecture, $ids);
 }

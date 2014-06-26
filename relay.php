@@ -60,6 +60,8 @@ function parseJSON($json)
         				break;
         	case "redeem": redeem($json);
         				break;
+            case "delete": delete($json);
+                        break;
         }
     }
 }
@@ -88,10 +90,12 @@ function get($json)
 
 function update($json)
 {
-    if(isset($json["target"]) && $json["target"] == "fbsheet")
-        update_feedback_sheet($json);
-    else
-        update_lecture_type($json);
+    if(isset($json["name"])) {
+        if (isset($json["target"]) && $json["target"] == "fbsheet")
+            update_feedback_sheet($json);
+        else
+            update_lecture_type($json);
+    }
 }
 
 function clean($json)
@@ -108,6 +112,14 @@ function redeem($json)
 	{
 		echo redeem_token($json["token"]);
 	}
+}
+
+function delete($json)
+{
+    if(isset($json["name"]) && isset($json["items"]))
+    {
+        delete_feedback_questions($json["name"], $json["items"]);
+    }
 }
 
 /**
@@ -231,6 +243,17 @@ function get_feedback($json)
     }
     global $connection;
     return json_encode($connection->getFeedbackForLecture($json["name"]));
+}
+
+/**
+ * Deletes a list of feedback IDs for a lecture
+ * @param string $name Name of lecture
+ * @param array $items Feedback Items to delete
+ */
+function delete_feedback_questions($name, $items)
+{
+    global $connection;
+    return $connection->deleteFeedbackItems($name, $items);
 }
 
 ?>

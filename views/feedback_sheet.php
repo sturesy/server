@@ -163,7 +163,7 @@ class feedback_sheet
                 if(isset($entry["input"]))
                     $results[] = array("input" => $entry["input"], "fbid" => $entry["fbid"]);
             }
-            $this->databaseconnection->submitFeedbackForLecture($this->lecture_name, $this->user_id_cookie, $results);
+            $this->databaseconnection->submitFeedbackForLecture($this->user_id_cookie, $results);
             $this->displaySuccessPage();
         }
     }
