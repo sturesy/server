@@ -43,6 +43,10 @@ class Content
                     include_once 'views/feedback_sheet.php';
                     $this->subcontent = new feedback_sheet($this->databaseconnection, $this->user_id_cookie);
                     break;
+                case "feedback_live":
+                    include_once 'views/feedback_live.php';
+                    $this->subcontent = new feedback_live($this->databaseconnection, $this->user_id_cookie);
+                    break;
             }
         }
         else if(isset($_GET["admin"]))
