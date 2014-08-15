@@ -359,6 +359,39 @@ class MySQLiDatabase implements DatabaseConnection
         return $rows;
     }
 
+    function getFeedbackForLecture($lecture)
+    {
+        $lectureid = $this->getLectureIDFromName($lecture);
+        $query = "SELECT fbid, guid, response FROM sturesy_fb JOIN sturesy_fbsheets USING (fbid) WHERE lid = '$lectureid'";
+
+        $result = $this->mysqli->query($query);
+
+        $rows = array();
+        while(($row = $result->fetch_array(MYSQL_ASSOC))) {
+            $fbid = $row["fbid"];
+            unset($row["fbid"]);
+            $rows[$fbid][] = $row; // index by feedback id
+        }
+        return $rows;
+    }
+
+    function deleteFeedbackItems($lecture, $ids)
+    {
+        $lectureid = $this->getLectureIDFromName($lecture);
+        $query = "DELETE FROM sturesy_fbsheets WHERE fbid = ? AND lid = ?";
+        $stmt = $this->mysqli->prepare($query);
+
+        foreach($ids as $id) {
+            $stmt->bind_param("ii", $id, $lectureid);
+            $stmt->execute();
+        }
+        $stmt->close();
+    }
+
+    // ========================================
+    // feedback_sheet.php functions:
+    // ========================================
+
     function submitFeedbackForLecture($guid, $responses)
     {
         $success = true;
@@ -395,32 +428,26 @@ class MySQLiDatabase implements DatabaseConnection
         return $count > 0;
     }
 
-    function getFeedbackForLecture($lecture)
+    // ========================================
+    // feedback_live.php functions:
+    // ========================================
+
+    function isLiveFeedbackEnabledForLecture($lecturename)
     {
-        $lectureid = $this->getLectureIDFromName($lecture);
-        $query = "SELECT fbid, guid, response FROM sturesy_fb JOIN sturesy_fbsheets USING (fbid) WHERE lid = '$lectureid'";
+        $lectureid = $this->getLectureIDFromName($lecturename);
+        if(!$lectureid)
+            return false;
 
-        $result = $this->mysqli->query($query);
-
-        $rows = array();
-        while(($row = $result->fetch_array(MYSQL_ASSOC))) {
-            $fbid = $row["fbid"];
-            unset($row["fbid"]);
-            $rows[$fbid][] = $row; // index by feedback id
-        }
-        return $rows;
-    }
-
-    function deleteFeedbackItems($lecture, $ids)
-    {
-        $lectureid = $this->getLectureIDFromName($lecture);
-        $query = "DELETE FROM sturesy_fbsheets WHERE fbid = ? AND lid = ?";
+        $query = "SELECT live_feedback_enabled FROM sturesy_lectures WHERE id = ?";
         $stmt = $this->mysqli->prepare($query);
 
-        foreach($ids as $id) {
-            $stmt->bind_param("ii", $id, $lectureid);
-            $stmt->execute();
-        }
+        $stmt->bind_param("i", $lectureid);
+        $stmt->execute();
+
+        $stmt->bind_result($enabled);
+        $stmt->fetch();
         $stmt->close();
+
+        return $enabled != 0;
     }
 }

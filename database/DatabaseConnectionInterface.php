@@ -75,11 +75,19 @@ interface DatabaseConnection
 
     function getFeedbackSheetForLecture($lecture);
 
+    function getFeedbackForLecture($lecture);
+
+    function deleteFeedbackItems($lecture, $ids);
+
+    // ========================================
+    // feedback_sheet.php functions:
+    // ========================================
     function submitFeedbackForLecture($guid, $responses);
 
     function userHasSubmittedForLecture($lecture, $guid);
 
-    function getFeedbackForLecture($lecture);
-
-    function deleteFeedbackItems($lecture, $ids);
+    // ========================================
+    // feedback_live.php functions:
+    // ========================================
+    function isLiveFeedbackEnabledForLecture($lecturename);
 }
