@@ -12,6 +12,7 @@ CREATE TABLE `sturesy_lectures` (
   `email` varchar(80) NOT NULL,
   `date` datetime NOT NULL,
   `token` char(40) DEFAULT NULL,
+  `live_feedback_enabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `lecture` (`lecture`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
@@ -36,27 +37,38 @@ CREATE TABLE `sturesy_votes` (
   PRIMARY KEY (`guid`,`lid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
+--
+-- Table structure for table `sturesy_fb`
+--
+
+DROP TABLE IF EXISTS `sturesy_fb`;
 CREATE TABLE IF NOT EXISTS `sturesy_fb` (
   `fbid` int(11) NOT NULL,
   `guid` varchar(60) NOT NULL,
-  `response` text NOT NULL
+  `response` text NOT NULL,
+  PRIMARY KEY (`fbid`,`guid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Constraints for table `sturesy_fb`
+--
 ALTER TABLE `sturesy_fb`
-ADD PRIMARY KEY (`fbid`,`guid`);
+ADD CONSTRAINT `sturesy_fb_ibfk_1` FOREIGN KEY (`fbid`) REFERENCES `sturesy_fbsheets` (`fbid`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+--
+-- Table structure for table `sturesy_fbsheets`
+--
+
+DROP TABLE IF EXISTS `sturesy_fbsheets`;
 CREATE TABLE IF NOT EXISTS `sturesy_fbsheets` (
-`fbid` int(11) NOT NULL,
+`fbid` int(11) NOT NULL AUTO_INCREMENT,
   `lid` int(11) NOT NULL,
   `title` text NOT NULL,
   `description` text,
   `type` varchar(60) NOT NULL,
   `mandatory` tinyint(1) NOT NULL,
-  `extra` text
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+  `extra` text,
+  `position` int(11) NOT NULL,
+  PRIMARY KEY (`fbid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-ALTER TABLE `sturesy_fbsheets`
-ADD PRIMARY KEY (`fbid`);
-
-ALTER TABLE `sturesy_fbsheets`
-MODIFY `fbid` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
