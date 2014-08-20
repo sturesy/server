@@ -62,6 +62,8 @@ function parseJSON($json)
         				break;
             case "delete": delete($json);
                         break;
+            case "live": live($json);
+                        break;
         }
     }
 }
@@ -84,7 +86,7 @@ function get($json)
                 echo get_feedback($json);
         }
         else
-            echo query_all_votes($json["name"]);
+            query_all_votes($json["name"]);
     }
 }
 
@@ -102,7 +104,7 @@ function clean($json)
 {
     if(isset($json["name"]))
     {
-        echo clean_votes($json);
+        clean_votes($json);
     }
 }
 
@@ -110,7 +112,7 @@ function redeem($json)
 {
 	if(isset($json["token"]))
 	{
-		echo redeem_token($json["token"]);
+		redeem_token($json["token"]);
 	}
 }
 
@@ -120,6 +122,43 @@ function delete($json)
     {
         delete_feedback_questions($json["name"], $json["items"]);
     }
+}
+
+function live($json)
+{
+    global $connection;
+    if(isset($json["name"]) && isset($json["action"])) {
+        $action = $json["action"];
+
+        if($action == "setstate" && isset($json["enabled"])) {
+            // clear previous live feedback (e.g. from unterminated sessions)
+            $connection->deleteLiveFeedback($json["name"]);
+            if($connection->setLiveFeedbackState($json["name"], $json["enabled"]))
+                echo "OK";
+        }
+        else if($action == "poll") {
+            echo json_encode(selectdelete_live($json["name"]));
+        }
+    }
+}
+
+/**
+ * This function will fetch the latest messages and delete exactly these
+ * @param $name name of lecture
+ * @return array new messages
+ */
+function selectdelete_live($name)
+{
+    global $connection;
+    $result = $connection->getLiveFeedbackForLecture($name);
+
+    $ids = array();
+    foreach($result as $message) {
+        $ids[] = $message["msgid"];
+    }
+    $connection->deleteLiveFeedback($name, $ids);
+
+    return $result;
 }
 
 /**
@@ -232,7 +271,7 @@ function get_feedback_sheet($json)
 
 /***
  * Returns the user-submitted feedback to a lecture
- * @param $json Submitted JSON data
+ * @param array $json Submitted JSON data
  * @return string Collected feedbac
  */
 function get_feedback($json)

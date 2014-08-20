@@ -52,6 +52,7 @@ class feedback_live
         $lecture_exists = !$this->databaseconnection->isLectureIDFree($this->lecture_name);
         $live_enabled = $this->databaseconnection->isLiveFeedbackEnabledForLecture($this->lecture_name);
 
+        // check if lecture exists and live-feedback is enabled for selected lecture
         if(!$lecture_exists || !$live_enabled) {
             include_once 'views/mainpage.php';
             $_SESSION["alert"] = "<strong>Error:</strong> ";
@@ -64,6 +65,24 @@ class feedback_live
             $mainpage = new mainpage();
             $mainpage->display();
             return;
+        }
+
+        // process message submission
+        if(isset($_POST["submitmessage"])) {
+            $stop = false;
+            $name = $_POST["name"];
+            $subject = $_POST["subject"];
+
+            echo "<div class=\"container\">";
+
+            $message = $_POST["message"];
+            if(strlen($message) > 0) {
+                $this->databaseconnection->submitFeedbackLiveMessageForLecture($this->lecture_name, $stop, $name, $subject, $message);
+                echo "<div class=\"alert alert-info\">Message submitted.";
+            } else {
+                echo "<div class=\"alert alert-danger\">Please enter a message.";
+            }
+            echo "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button></div></div>";
         }
 
         ?>
@@ -84,7 +103,8 @@ class feedback_live
                 <div class="panel-body">
                     This allows you to send a direct feedback message to your lecturer, e.g. to ask a question or remark/point out something.<br/><br/>
 
-                    <form role="form" method="post" action="index.php?action=feedback_live&lecture=<?php echo $lecture;?>">
+                    <form role="form" method="post" action="/index.php?action=feedback_live&lecture=<?php echo $lecture;?>">
+                        <input type="hidden" name="submitmessage">
                         <div class="form-group">
                             <label for="name">Your Name:</label>
                             <input type="text" name="name" id="name" class="form-control" value="Anonymous">

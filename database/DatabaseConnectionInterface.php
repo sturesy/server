@@ -79,6 +79,12 @@ interface DatabaseConnection
 
     function deleteFeedbackItems($lecture, $ids);
 
+    function setLiveFeedbackState($lecturename, $state);
+
+    function deleteLiveFeedback($lecturename, $ids=null);
+
+    function getLiveFeedbackForLecture($lecturename);
+
     // ========================================
     // feedback_sheet.php functions:
     // ========================================
@@ -90,4 +96,6 @@ interface DatabaseConnection
     // feedback_live.php functions:
     // ========================================
     function isLiveFeedbackEnabledForLecture($lecturename);
+
+    function submitFeedbackLiveMessageForLecture($lecturename, $stop, $name = null, $subject = null, $message = null);
 }

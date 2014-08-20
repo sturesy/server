@@ -72,3 +72,18 @@ CREATE TABLE IF NOT EXISTS `sturesy_fbsheets` (
   PRIMARY KEY (`fbid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `sturesy_livemessages`
+--
+
+DROP TABLE IF EXISTS `sturesy_livemessages`;
+CREATE TABLE IF NOT EXISTS `sturesy_livemessages` (
+  `msgid` int(11) NOT NULL AUTO_INCREMENT,
+  `lid` int(11) NOT NULL,
+  `stop` tinyint(1) NOT NULL DEFAULT '0',
+  `name` text,
+  `subject` text,
+  `message` text,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`msgid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
