@@ -20,7 +20,7 @@ if(isset($_SESSION["alert"])) {
 	<br>
     <div class="text-center">
         <div class="btn-group">
-            <button type="submit" class="btn btn-default btn-primary">Vote</button>
+            <button type="submit" onclick="$('#action').val('vote'); $('#loginform').submit()" class="btn btn-default btn-primary">Vote</button>
             <div class="btn-group">
                 <button type="button" class="btn btn-default btn-primary dropdown-toggle" data-toggle="dropdown">
                     Feedback
