@@ -21,7 +21,6 @@ class listmodule implements IModule
     public function javascript()
     {
         $out = "";
-        var_dump($this->values["input"]);
         if(isset($this->values["input"])) {
             foreach($this->values["input"] as $val) {
                 $out .= "$('#" . $this->id . "-" . crc32($val) . "').button('toggle');";
