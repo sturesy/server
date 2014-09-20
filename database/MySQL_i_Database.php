@@ -523,7 +523,7 @@ class MySQLiDatabase implements DatabaseConnection
         if(!$lectureid)
             return false;
 
-        $query = "INSERT INTO sturesy_livemessages (lid, name, subject, message) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO sturesy_livemessages (lid, name, subject, message) VALUES (?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($query);
 
         $stmt->bind_param("isss", $lectureid, $name, $subject, $message);
