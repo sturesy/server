@@ -28,7 +28,6 @@ include_once 'database/DatabaseConnectionInterface.php';
 include_once 'views/modules/interface.module.php';
 include_once 'views/modules/textarea.module.php';
 include_once 'views/modules/list.module.php';
-include_once 'views/modules/long_list.module.php';
 
 class feedback_sheet
 {
@@ -108,6 +107,14 @@ class feedback_sheet
                             $values["elements"] = array(1, 2, 3, 4, 5, 6);
                             $mod = new listmodule($values, $fbid);
                             break;
+                        case "choice":
+                            $extra = json_decode($entry["extra"], true);
+
+                            $values["multiple"] = $extra["multiplechoice"];
+                            $values["elements"] = $extra["choices"];
+
+                            $mod = new listmodule($values, $fbid);
+                            break;
                     }
                     if($mod != null) {
                         $markPanel = $forgottenItems != null && in_array($entry["fbid"], $forgottenItems);
@@ -138,14 +145,15 @@ class feedback_sheet
 
     function processSubmission()
     {
-        // have all the mandatory items been responsed to?
+        // have all the mandatory items been responded to?
         $forgottenItems = array();
         foreach($this->sheet as $entry) {
             $fbid = $entry["fbid"];
 
             // re-enter previous data if available
             if(isset($_POST[$fbid])) {
-                $this->sheet[$fbid]["input"] = $_POST[$fbid];
+                $response = $_POST[$fbid];
+                $this->sheet[$fbid]["input"] = $response;
             }
             // determine mandatory items that have not been responded to
             else if($entry["mandatory"] && (!isset($_POST[$fbid]) || $_POST[$fbid] == "")) {
@@ -160,8 +168,15 @@ class feedback_sheet
         else {
             $results = array();
             foreach($this->sheet as $entry) {
-                if(isset($entry["input"]))
-                    $results[] = array("input" => $entry["input"], "fbid" => $entry["fbid"]);
+                if(isset($entry["input"])) {
+                    $response = $entry["input"];
+
+                    // multiple choices are stored in arrays
+                    if(is_array($response))
+                        $response = json_encode($response);
+
+                    $results[] = array("input" => $response, "fbid" => $entry["fbid"]);
+                }
             }
             $this->databaseconnection->submitFeedbackForLecture($this->user_id_cookie, $results);
             $this->displaySuccessPage();
