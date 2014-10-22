@@ -48,10 +48,18 @@ class feedback_sheet
 
     function setup()
     {
+        // extract lecture name from GET request
         $this->lecture_name = $_GET["lecture"];
+        // get feedback sheet for said lecture
         $this->sheet = $this->databaseconnection->getFeedbackSheetForLecture($this->lecture_name);
     }
 
+    /***
+     * displays the panel for a question item
+     * @param $item question item
+     * @param $module matching module from views/modules/
+     * @param $mark highlight panel (mandatory but not answered?)
+     */
     function panelwithmodule($item, $module, $mark)
     {
         ?>
@@ -70,11 +78,17 @@ class feedback_sheet
     <?php
     }
 
+    /***
+     * iterates through the sheet and displays it in containers
+     * if a response was previously submitted, highlight questions that are mandatory and have not yet been answered to
+     * @param $forgottenItems list of feedback IDs that are mandatory and were not answered
+     */
     function displaySheet($forgottenItems = null)
     {
         ?>
         <div class="container">
             <?php
+                // error at the top of page: not all mandatory questions were answered
                 if($forgottenItems != null && count($forgottenItems) > 0) {
                     ?>
                     <div class="alert alert-danger alert-dismissable">
@@ -99,6 +113,8 @@ class feedback_sheet
                     if(isset($entry["input"]))
                         $values["input"] = $entry["input"];
 
+                    // extract sheet data and display question
+                    // TODO: move to modules?
                     switch($entry["type"]) {
                         case "comment":
                             $mod = new textarea($values, $fbid);
@@ -116,6 +132,7 @@ class feedback_sheet
                             $mod = new listmodule($values, $fbid);
                             break;
                     }
+                    // display panel for question
                     if($mod != null) {
                         $markPanel = $forgottenItems != null && in_array($entry["fbid"], $forgottenItems);
                         $this->panelwithmodule($entry, $mod, $markPanel);
@@ -151,12 +168,13 @@ class feedback_sheet
             $fbid = $entry["fbid"];
 
             // re-enter previous data if available
-            if(isset($_POST[$fbid])) {
+            if(isset($_POST[$fbid]) &&
+                !(is_string($_POST[$fbid]) && strlen($_POST[$fbid]) == 0) /* catch: text fields are always submitted as empty strings */) {
                 $response = $_POST[$fbid];
                 $this->sheet[$fbid]["input"] = $response;
             }
             // determine mandatory items that have not been responded to
-            else if($entry["mandatory"] && (!isset($_POST[$fbid]) || $_POST[$fbid] == "")) {
+            else if($entry["mandatory"]) {
                 $forgottenItems[] = $fbid;
             }
         }
