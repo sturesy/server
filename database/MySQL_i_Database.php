@@ -443,7 +443,7 @@ class MySQLiDatabase implements DatabaseConnection
     function getLiveFeedbackForLecture($lecturename)
     {
         $lectureid = $this->getLectureIDFromName($lecturename);
-        $query = "SELECT msgid, stop, name, subject, message, date FROM sturesy_livemessages WHERE lid = '$lectureid'";
+        $query = "SELECT msgid, name, subject, message, date FROM sturesy_livemessages WHERE lid = '$lectureid'";
 
         $result = $this->mysqli->query($query);
 
@@ -517,16 +517,16 @@ class MySQLiDatabase implements DatabaseConnection
         return $enabled != 0;
     }
 
-    function submitFeedbackLiveMessageForLecture($lecturename, $stop, $name = null, $subject = null, $message = null)
+    function submitFeedbackLiveMessageForLecture($lecturename, $name = null, $subject = null, $message = null)
     {
         $lectureid = $this->getLectureIDFromName($lecturename);
         if(!$lectureid)
             return false;
 
-        $query = "INSERT INTO sturesy_livemessages (lid, stop, name, subject, message) VALUES (?, ?, ?, ?, ?)";
+        $query = "INSERT INTO sturesy_livemessages (lid, name, subject, message) VALUES (?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($query);
 
-        $stmt->bind_param("iisss", $lectureid, $stop, $name, $subject, $message);
+        $stmt->bind_param("isss", $lectureid, $name, $subject, $message);
         $stmt->execute();
         $result = $stmt->affected_rows == 1;
 

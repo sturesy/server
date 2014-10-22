@@ -97,5 +97,5 @@ interface DatabaseConnection
     // ========================================
     function isLiveFeedbackEnabledForLecture($lecturename);
 
-    function submitFeedbackLiveMessageForLecture($lecturename, $stop, $name = null, $subject = null, $message = null);
+    function submitFeedbackLiveMessageForLecture($lecturename, $name = null, $subject = null, $message = null);
 }
