@@ -119,10 +119,6 @@ class feedback_sheet
                         case "comment":
                             $mod = new textarea($values, $fbid);
                             break;
-                        case "grades":
-                            $values["elements"] = array(1, 2, 3, 4, 5, 6);
-                            $mod = new listmodule($values, $fbid);
-                            break;
                         case "choice":
                             $extra = json_decode($entry["extra"], true);
 
