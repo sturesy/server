@@ -23,7 +23,7 @@ class listmodule implements IModule
         $out = "";
         if(isset($this->values["input"])) {
             foreach($this->values["input"] as $val) {
-                $out .= "$('#" . $this->id . "-" . crc32($val) . "').button('toggle');";
+                $out .= "$('#" . $this->id . "-" . crc32($val) . "').prop('checked', true);";
             }
         }
         return $out;
@@ -37,25 +37,23 @@ class listmodule implements IModule
 ?>
     <div class="text-center">
         <p><?php echo $this->values["description"]?></p>
-        <p>
             <?php
-                echo "<div class=\"btn-group\" data-toggle=\"buttons\">";
 
             $selectionCounter = 1;
 
-            $type = "radio";
             if(isset($this->values["multiple"]) && $this->values["multiple"])
                 $type = "checkbox";
+            else
+                $type = "radio";
 
 
             foreach($this->values["elements"] as $value){?>
-                <label class="btn btn-primary" id="<?php echo $this->id."-".crc32($value)?>">
-                    <input type="<?php echo $type?>" name="<?php echo $this->id?>[]" value="<?php echo $value;?>"><?php echo $value?></label>
+                <div class="<?php echo $type?>-inline">
+                    <label><input style="display: block" type="<?php echo $type?>" id="<?php echo $this->id."-".crc32($value)?>" value="<?php echo $value;?>" name="<?php echo $this->id?>[]"><?php echo $value;?></label>
+                </div>
             <?php $selectionCounter++;
             }
-                echo "</div>";
             ?>
-	    </p>
     </div>
 <?php 
     }

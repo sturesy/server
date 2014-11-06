@@ -98,7 +98,7 @@ class feedback_sheet
                     <?php
                 }
             ?>
-            <form role="form" method="post" action="index.php?action=feedback_sheet&lecture=<?php echo $this->lecture_name;?>">
+            <form role="form" method="post" action="index.php?action=feedback_sheet&amp;lecture=<?php echo $this->lecture_name;?>">
                 <input type="hidden" name="submitfeedback">
                 <?php
                 // display each item of feedback sheet
@@ -115,19 +115,18 @@ class feedback_sheet
 
                     // extract sheet data and display question
                     // TODO: move to modules?
-                    switch($entry["type"]) {
-                        case "comment":
-                            $mod = new textarea($values, $fbid);
-                            break;
-                        case "choice":
-                            $extra = json_decode($entry["extra"], true);
-
-                            $values["multiple"] = $extra["multiplechoice"];
-                            $values["elements"] = $extra["choices"];
-
-                            $mod = new listmodule($values, $fbid);
-                            break;
+                    if($entry["type"] == "comment") {
+                        $mod = new textarea($values, $fbid);
                     }
+                    elseif(strpos($entry["type"], "choice") === 0) {
+                        $extra = json_decode($entry["extra"], true);
+
+                        $values["multiple"] = $extra["multiplechoice"];
+                        $values["elements"] = $extra["choices"];
+
+                        $mod = new listmodule($values, $fbid);
+                    }
+
                     // display panel for question
                     if($mod != null) {
                         $markPanel = $forgottenItems != null && in_array($entry["fbid"], $forgottenItems);
