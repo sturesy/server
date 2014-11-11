@@ -326,7 +326,7 @@ class MySQLiDatabase implements DatabaseConnection
         foreach ($sheet as $currentsheet) {
             $fbid = $currentsheet["fbid"];
             $title = $currentsheet["title"];
-            $desc = $currentsheet["desc"];
+            $desc = $currentsheet["description"];
             $type = $currentsheet["type"];
             $mandatory = (int)$currentsheet["mandatory"];
             $extra = $currentsheet["extra"];
@@ -353,7 +353,7 @@ class MySQLiDatabase implements DatabaseConnection
         $rows = array();
         while(($row = $result->fetch_array(MYSQL_ASSOC))) {
             $row["fbid"] = (int)$row["fbid"];
-            $row["mandatory"] = (int)$row["mandatory"];
+            $row["mandatory"] = (bool)$row["mandatory"];
             $rows[$row["fbid"]] = $row; // index by feedback id
         }
 
