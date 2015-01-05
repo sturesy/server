@@ -391,68 +391,6 @@ class MySQLiDatabase implements DatabaseConnection
         return $result;
     }
 
-    function setLiveFeedbackState($lecturename, $state)
-    {
-        $lectureid = $this->getLectureIDFromName($lecturename);
-        $query = "UPDATE sturesy_lectures SET live_feedback_enabled=? WHERE id=?";
-        $stmt = $this->mysqli->prepare($query);
-
-        $stmt->bind_param("ii", $state, $lectureid);
-        $result = $stmt->execute();
-
-        $stmt->close();
-        return $result;
-    }
-
-    /**
-     * Deletes all or a specified set of messages from the database.
-     * @param string $lecturename targetted lecture
-     * @param array $ids if not null, all messages with the specified IDs will be deleted
-     * @return bool whether the query was successful
-     */
-    function deleteLiveFeedback($lecturename, $ids=null)
-    {
-        $lectureid = $this->getLectureIDFromName($lecturename);
-
-        // delete all for given lecture
-        if ($ids == null) {
-            $query = "DELETE FROM sturesy_livemessages WHERE lid=?";
-
-            $stmt = $this->mysqli->prepare($query);
-
-            $stmt->bind_param("i", $lectureid);
-            $stmt->execute();
-
-            $result = $stmt->affected_rows > 0;
-            $stmt->close();
-            return $result;
-        } else { // delete only selected messages
-            $query = "DELETE FROM sturesy_livemessages WHERE msgid = ? AND lid = ?";
-            $stmt = $this->mysqli->prepare($query);
-
-            foreach($ids as $id) {
-                $stmt->bind_param("ii", $id, $lectureid);
-                $stmt->execute();
-            }
-            $result = $stmt->affected_rows > 0;
-            $stmt->close();
-            return $result;
-        }
-    }
-
-    function getLiveFeedbackForLecture($lecturename)
-    {
-        $lectureid = $this->getLectureIDFromName($lecturename);
-        $query = "SELECT msgid, name, subject, message, date FROM sturesy_livemessages WHERE lid = '$lectureid'";
-
-        $result = $this->mysqli->query($query);
-
-        $rows = array();
-        while(($row = $result->fetch_array(MYSQL_ASSOC))) {
-            $rows[] = $row;
-        }
-        return $rows;
-    }
 
     // ========================================
     // feedback_sheet.php functions:
@@ -517,20 +455,84 @@ class MySQLiDatabase implements DatabaseConnection
         return $enabled != 0;
     }
 
-    function submitFeedbackLiveMessageForLecture($lecturename, $name = null, $subject = null, $message = null)
+    function submitFeedbackLiveMessageForLecture($lecturename, $guid, $name = null, $subject = null, $message = null)
     {
         $lectureid = $this->getLectureIDFromName($lecturename);
         if(!$lectureid)
             return false;
 
-        $query = "INSERT INTO sturesy_livemessages (lid, name, subject, message) VALUES (?, ?, ?, ?)";
+        $query = "INSERT INTO sturesy_livemessages (lid, name, subject, message, guid) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->mysqli->prepare($query);
 
-        $stmt->bind_param("isss", $lectureid, $name, $subject, $message);
+        $stmt->bind_param("issss", $lectureid, $name, $subject, $message, $guid);
         $stmt->execute();
         $result = $stmt->affected_rows == 1;
 
         $stmt->close();
         return $result;
     }
+
+    function setLiveFeedbackState($lecturename, $state)
+    {
+        $lectureid = $this->getLectureIDFromName($lecturename);
+        $query = "UPDATE sturesy_lectures SET live_feedback_enabled=? WHERE id=?";
+        $stmt = $this->mysqli->prepare($query);
+
+        $stmt->bind_param("ii", $state, $lectureid);
+        $result = $stmt->execute();
+
+        $stmt->close();
+        return $result;
+    }
+
+    /**
+     * Deletes all or a specified set of messages from the database.
+     * @param string $lecturename targetted lecture
+     * @param array $ids if not null, all messages with the specified IDs will be deleted
+     * @return bool whether the query was successful
+     */
+    function deleteLiveFeedback($lecturename, $ids=null)
+    {
+        $lectureid = $this->getLectureIDFromName($lecturename);
+
+        // delete all for given lecture
+        if ($ids == null) {
+            $query = "DELETE FROM sturesy_livemessages WHERE lid=?";
+
+            $stmt = $this->mysqli->prepare($query);
+
+            $stmt->bind_param("i", $lectureid);
+            $stmt->execute();
+
+            $result = $stmt->affected_rows > 0;
+            $stmt->close();
+            return $result;
+        } else { // delete only selected messages
+            $query = "DELETE FROM sturesy_livemessages WHERE msgid = ? AND lid = ?";
+            $stmt = $this->mysqli->prepare($query);
+
+            foreach($ids as $id) {
+                $stmt->bind_param("ii", $id, $lectureid);
+                $stmt->execute();
+            }
+            $result = $stmt->affected_rows > 0;
+            $stmt->close();
+            return $result;
+        }
+    }
+
+    function getLiveFeedbackForLecture($lecturename)
+    {
+        $lectureid = $this->getLectureIDFromName($lecturename);
+        $query = "SELECT msgid, guid, name, subject, message, date FROM sturesy_livemessages WHERE lid = '$lectureid'";
+
+        $result = $this->mysqli->query($query);
+
+        $rows = array();
+        while(($row = $result->fetch_array(MYSQL_ASSOC))) {
+            $rows[] = $row;
+        }
+        return $rows;
+    }
+
 }

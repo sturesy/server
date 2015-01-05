@@ -76,7 +76,7 @@ class feedback_live
 
             $message = $_POST["message"];
             if(strlen($message) > 0) {
-                $this->databaseconnection->submitFeedbackLiveMessageForLecture($this->lecture_name, $name, $subject, $message);
+                $this->databaseconnection->submitFeedbackLiveMessageForLecture($this->lecture_name, $this->user_id_cookie, $name, $subject, $message);
                 echo "<div class=\"alert alert-info\">Message submitted.";
             } else {
                 echo "<div class=\"alert alert-danger\">Please enter a message.";

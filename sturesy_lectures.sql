@@ -84,5 +84,6 @@ CREATE TABLE IF NOT EXISTS `sturesy_livemessages` (
   `subject` text,
   `message` text,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `guid` varchar(60) NOT NULL,
   PRIMARY KEY (`msgid`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
