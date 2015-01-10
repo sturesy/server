@@ -199,9 +199,9 @@ class feedback_sheet
     function display()
     {
         $lecture_exists = !$this->databaseconnection->isLectureIDFree($this->lecture_name);
-        if(!$lecture_exists) {
+        if(!$lecture_exists || count($this->sheet) == 0) {
             include_once 'views/mainpage.php';
-            $_SESSION["alert"] = "<strong>Error:</strong> Invalid Lecture-ID.";
+            $_SESSION["alert"] = "<strong>Error:</strong> Invalid Lecture-ID or sheet is empty.";
             $mainpage = new mainpage();
             $mainpage->display();
             return;
