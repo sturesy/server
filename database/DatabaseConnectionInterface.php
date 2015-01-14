@@ -71,4 +71,31 @@ interface DatabaseConnection
     
     function fetchKeyForLecture($lecturename);
 
+    function updateFeedbackSheetForLecture($lecturename, $sheet);
+
+    function getFeedbackSheetForLecture($lecture);
+
+    function getFeedbackForLecture($lecture);
+
+    function deleteFeedbackItems($lecture, $ids);
+
+    function setLiveFeedbackState($lecturename, $state);
+
+    function deleteLiveFeedback($lecturename, $ids=null);
+
+    function getLiveFeedbackForLecture($lecturename);
+
+    // ========================================
+    // feedback_sheet.php functions:
+    // ========================================
+    function submitFeedbackForLecture($guid, $responses);
+
+    function userHasSubmittedForLecture($lecture, $guid);
+
+    // ========================================
+    // feedback_live.php functions:
+    // ========================================
+    function isLiveFeedbackEnabledForLecture($lecturename);
+
+    function submitFeedbackLiveMessageForLecture($lecturename, $guid, $name = null, $subject = null, $message = null);
 }

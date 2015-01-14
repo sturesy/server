@@ -17,6 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+include_once("config.php");
+
 /**
  * If the cookie is not set, set it and then return it
  */
@@ -63,7 +65,7 @@ function get_id_cookie()
  */
 function reload_page($success)
 {
-	$msg;
+	$msg = "";
 	if($success == 1)
 	{
 		$msg = '<div class="alert alert-success text-center"><h4>Vote posted!</h4></div>';

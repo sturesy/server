@@ -166,4 +166,8 @@ class MySQLDatabase implements DatabaseConnection
     
     }
 
+    function updateFeedbackSheetForLecture($lecturename, $sheet)
+    {
+
+    }
 }
