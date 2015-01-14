@@ -132,7 +132,7 @@ function live($json)
 
         if($action == "setstate" && isset($json["enabled"])) {
             // clear previous live feedback (e.g. from unterminated sessions)
-            $connection->deleteLiveFeedback($json["name"]);
+            // $connection->deleteLiveFeedback($json["name"]);
             if($connection->setLiveFeedbackState($json["name"], $json["enabled"]))
                 echo "OK";
         }
