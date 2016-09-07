@@ -32,7 +32,7 @@ function get_id_cookie()
 		$cry_id = fnEncrypt($encryption_key.','.$id.",".$encryption_key);
 		
 		setcookie('id', $cry_id , time() + 3600*3);
-		
+
 		return $id;
 	}
 	else // isset
@@ -40,7 +40,7 @@ function get_id_cookie()
 		$id = fnDecrypt($_COOKIE['id']);
 		
 		$arra = explode(",", $id);
-				
+		
 		if($arra[0] == $encryption_key && $arra[2] == $encryption_key)
 		{
 			return $arra[1];
@@ -121,14 +121,23 @@ function verify_rest_message($message, $hmac)
 function show_success($msg)
 {
 ?>
-<div class="alert alert-success text-center"><h2>Success</h2><p><?php echo $msg ?></p></div>
+<div class="alert alert-success text-center">
+	<h2>Success</h2>
+	<p><?php echo $msg ?></p>
+</div>
 <?php
 }
 
 function show_error($msg)
 {
 ?>
-<div class="alert alert-danger text-center"><h2>Error</h2><p><?php echo $msg ?><p/></div>
+<div class="alert alert-danger text-center">
+	<h2>Error</h2>
+	<p><?php echo $msg ?>
+	
+	
+	<p />
+</div>
 <?php
 }
 

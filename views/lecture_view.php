@@ -65,7 +65,7 @@ function display_text_choice($lecture_name)
     <div class="row"> <!-- row2 -->
         <div class="text-center">
     	    <?php display_reload_button();?>
-    </div>
+    	</div>
     </div><!-- row2 -->
 
 </div>	<!-- container-fluid -->
@@ -79,41 +79,41 @@ function display_multiple_choice($lecture_name, $answers)
 <form method="post" action="index.php?lecture=<?php echo $lecture_name;?>">
     <input type="hidden" name="cmd" value="multiple"/>
     <input type="hidden" name="type" value="m"/>
-<div class="text-center">
-    <table class="table table-condensed text-center">
-        <tr>
+	<div class="text-center">
+
      <?php for ($i = 0; $i < count($answers); $i++) 
            {
-            $c = chr(65+$i); 
-        ?>
-        <td class="text-center" style="border-top:none;">
-            <input type="checkbox" id="checkbox-2-<?php echo $i;?>" name="<?php echo $c;?>"><label for="checkbox-2-<?php echo $i;?>"><?php echo $c;?></label>
-        </td>
-        <?php
-              if(($i+1) % 2 == 0)
-                {
-                ?>
-            </tr>
-            <tr>
-                <?php 
-                }
+	            if($i % 2 == 0)
+	           	{
+	           		?>
+	           		<div class="row"><!-- row -->
+	           		<?php 
+	           	}
+	           	
+	            $c = chr(65+$i); 
+	        	?>
+	        	<div class="col-xs-12 col-md-6"> <!-- col-xs-12 -->
+	            	<input type="checkbox" id="checkbox-2-<?php echo $i;?>" name="<?php echo $c;?>"><label for="checkbox-2-<?php echo $i;?>"><?php echo $answers[$i]?></label>
+	        	</div> <!-- /col-xs-12 -->
+	        	<?php
+	              if(($i+1) % 2 == 0)
+	              {
+	                ?>
+	           		</div><!-- /row -->
+	                <?php 
+	              }
            }?>
-        </tr>
-			<tr>
-			    <td colspan="2" style="border-top:none;">
-			        <button type="submit" class="btn btn-default btn-large"><i class="icon-ok"></i>Submit</button>
-			    </td>
-			</tr>
-	</table>
-</div>
+        </div>
+			<div class="row text-center"><!-- submitbtn -->
+			        <button type="submit" class="btn btn-default btn-large btn-block"><i class="icon-ok"></i> Submit </button>
+			</div><!-- /submitbtn -->
+		</div>
 </form>
-	<table class="table table-condensed text-center">
-	    <tr>
-		    <td colspan="2" style="border-top:none;">
-		        <?php display_reload_button();?>
-		    </td>
-        </tr>
-	</table>
+	<div class="row" style="margin-top: 10px;"> <!-- row2 -->
+        <div class="text-center">
+    	    <?php display_reload_button();?>
+    	</div>
+    </div><!-- row2 -->
     <?php 
 }
 
@@ -121,37 +121,41 @@ function display_multiple_choice($lecture_name, $answers)
 
 function display_single_choice($lecture_name, $answers, $preparedValuesForButton)
 {
+	
+	//var_dump(json_encode($answers));var_dump(json_encode($preparedValuesForButton));
+	
     ?>
-<table class="table table-condensed text-center table-borderless">
-    <tr>
     <?php 
     for ($i = 0; $i < count($answers); $i++)
     {
+    	if($i%2 == 0)
+    	{
+    		?>
+    		<div class="row">
+    		<?php 
+    	}
+    	
     ?>
-    
-        <td style="border-top: none;">
+        <div class="col-md-6 col-xs-12" style="margin-bottom: 8px;">
 		    <form method="post" action="index.php?lecture=<?php echo $lecture_name;?>">
 	    	    <input type="hidden" name="cmd" value="<?php echo $preparedValuesForButton[$i][0];?>"/>
 		        <input type="hidden" name="type" value="s"/>
-		        <input type="submit" class="btn btn-default btn-large btn-block" value="<?php echo $preparedValuesForButton[$i][1];?>" />
+		        <input type="submit" class="btn btn-default btn-large btn-block" value="<?php echo $answers[$i];?>" style="word-break: break-word;white-space:normal;"/>
 		    </form>
-		</td>
+		</div>
     <?php 
         if(($i+1) % 2 == 0)
         {
-            ?></tr>
-            <tr><?php 
+            ?></div><?php 
         }
     }
     
     ?>
-    </tr>
-	<tr>
-	    <td colspan="2" style="border-top: none;">
+    <div class="row">
+    	<div class="text-center">
 	        <?php display_reload_button();?>
-	    </td>
-	</tr>
-        </table>
+    	</div>
+    </div>
         <?php 
 }
 

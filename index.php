@@ -18,7 +18,7 @@
  */
 
 /*
- * CURRENT VERSION : 0.6.1
+ * CURRENT VERSION : 0.6.2
  * COMPATIBLE WITH STURESY: 0.6.0 and higher
  */
 
@@ -31,6 +31,8 @@ if(isset($_REQUEST["mobile"]))
 else
 {
 
+include_once 'config.php';
+	
 $INDEXPHPWASACCESSED = true;    
     
 $app = new Application();

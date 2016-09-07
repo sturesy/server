@@ -146,7 +146,7 @@ class lecture
     function handle_single_vote()
     {
         $stuff = explode(",", fnDecrypt($_REQUEST['cmd']));
-
+        
         if($stuff[1]==$this->user_id_cookie && $stuff[2]=='vote')
         {
             $vote = $stuff[3];
