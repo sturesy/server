@@ -18,37 +18,12 @@
  */
 
 /**
- * Returns the voting type and corresponding information
- * @param name (string), lecture name
- */
-function get_vote_type($name)
-{
-    global $database; 
-	$name = $database->escape_string($name);
-	$query = "SELECT question, type, answers, correctanswers, sturesy_lectures.date FROM sturesy_lectures, sturesy_question 
-	           WHERE sturesy_question.lecture = id AND sturesy_lectures.lecture = '$name';";
-
-
-	$result = $database->fetch_array($database->query($query));
-	
-	if(!$result)
-	{
-	   return -1;
-	}
-	else
-	{
-		return $result;
-	}
-}
-
-
-/**
  * If the cookie is not set, set it and then return it
  */
 function get_id_cookie()
 {
-
 	global $encryption_key;
+	
 
 	if(!isset($_COOKIE["id"]))
 	{
@@ -57,7 +32,7 @@ function get_id_cookie()
 		$cry_id = fnEncrypt($encryption_key.','.$id.",".$encryption_key);
 		
 		setcookie('id', $cry_id , time() + 3600*3);
-		
+
 		return $id;
 	}
 	else // isset
@@ -65,7 +40,7 @@ function get_id_cookie()
 		$id = fnDecrypt($_COOKIE['id']);
 		
 		$arra = explode(",", $id);
-				
+		
 		if($arra[0] == $encryption_key && $arra[2] == $encryption_key)
 		{
 			return $arra[1];
@@ -91,85 +66,79 @@ function reload_page($success)
 	$msg;
 	if($success == 1)
 	{
-		$msg = '<div class="alert alert-success"><h4><center>Vote posted!</center></h4></div>';
+		$msg = '<div class="alert alert-success text-center"><h4>Vote posted!</h4></div>';
 	}
 	else if($success == 2)
 	{
-		$msg = '<div class="alert alert-error"><h4><center>Please select an answer!</center></h4></div>';
+		$msg = '<div class="alert alert-danger text-center"><h4>Please select an answer!</h4></div>';
 	}
 	else if($success == 3)
 	{
-		$msg = '<div class="alert alert-error"><h4><center>Please provide an answer!</center></h4></div>';
+		$msg = '<div class="alert alert-danger text-center"><h4>Please provide an answer!</h4></div>';
 	}
 	else
 	{
-		$msg = '<div class="alert alert-error"><h4><center>Vote already posted!</center></h4></div>';
+		$msg = '<div class="alert alert-danger text-center"><h4>Vote already posted!</h4></div>';
 	}
-?>
-<body onLoad="JavaScript:timedRefresh(2000);">
-<?php 
-echo $msg ;
+    echo $msg ;
 }
-
-
-function no_lecture_id()
+/**
+ * Returns the appropriate javascript snippet for reloading the page
+ * @param int $time in milliseconds
+ * @return string javascript-snipped for &lt;body&gt; in form onLoad=".."
+ */
+function reload_page_httpbodymod($time)
 {
-	$lectureid = $_REQUEST["lecture"];
-	$msg;
-	if(!isset($lectureid) || strlen($lectureid) == 0)
-	{
-		$msg = "Please enter a Lecture-ID";
-	}
-	else
-	{
-		$msg = 'There is currently no Voting with the provided Lecture-ID "<b>'.$lectureid.'</b>"';
-	}
-?>
-	<div class="container" align="center">
-		<form class="form-signin">
-			<h2>Error</h2>
-			<p class="red size20"><?php echo $msg; ?></p>
-			<br>
-			<button class="btn btn-warning btn-large" onClick="history.go(-1);return true;">
-				<i class="icon-arrow-left icon-white"></i> Back
-			</button>
-		</form>
-	</div>
-<?php
-	include_once("customize/footer.php");
+    return 'onLoad="JavaScript:timedRefresh('.$time.');"';
 }
+
 
 function fnEncrypt($sValue)
 {
-	global $encryptionKey;
+	global $encryption_key;
 	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 	$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
-	return trim(base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $sValue, MCRYPT_MODE_CBC, $iv)));
+	return trim(base64_encode($iv.mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $encryption_key, $sValue, MCRYPT_MODE_CBC, $iv)));
 }
 
 function fnDecrypt($sValue)
 {
-	global $encryptionKey;
+	global $encryption_key;
 	$iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
 	$sValue = base64_decode($sValue);
 	$iv_dec = substr($sValue, 0, $iv_size);
 	$ciphertext_dec = substr($sValue, $iv_size);
-	$val = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryptionKey, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec));
+	$val = trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $encryption_key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec));
 	return $val;
-}
-
-function fetchLectureID($lecturename)
-{
-    global $database;
-    $query = "SELECT * FROM sturesy_lectures WHERE lecture ='$lecturename'";
-    $result = $database->query($query);    
-    return $database->sql_result($result ,"id");
 }
 
 function verify_rest_message($message, $hmac)
 {
 	global  $encryption_key;
 	return hash_hmac('SHA256', $message, $encryption_key) === $hmac;
+}
+
+function show_success($msg)
+{
+?>
+<div class="alert alert-success text-center">
+	<h2>Success</h2>
+	<p><?php echo $msg ?></p>
+</div>
+<?php
+}
+
+function show_error($msg)
+{
+?>
+<div class="alert alert-danger text-center">
+	<h2>Error</h2>
+	<p><?php echo $msg ?>
+	
+	
+	<p />
+</div>
+<?php
 }
 
 ?>
